@@ -13,7 +13,7 @@ import datetime
 class Task:
     """
     We define a Task by its day of assignment, duration, name,
-    difficulty and a variety of label to organize the planning properly
+    difficulty and a variety of labels to organize the planning properly
     """
 
     def __init__(self, name, duration, difficulty):

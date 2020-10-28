@@ -12,7 +12,7 @@ import datetime
 
 class Schedule:
     """
-
+    We define a schedule by the content of its work weeks
     """
 
     def __init__(self, weeks):
@@ -22,7 +22,7 @@ class Schedule:
 
 class Week:
     """
-
+    We define a week by the work days it is made of
     """
 
     def __init__(self, days):
@@ -32,7 +32,7 @@ class Week:
 
 class Day:
     """
-
+    We define a day by the tasks completed in each of its five minute slots
     """
 
     def __init__(self, five_minutes_slots):
