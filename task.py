@@ -23,6 +23,7 @@ class Task:
         self.duration = duration
         self.difficulty = difficulty
         self.labels = []
+        self.beginning_date = None
 
     def __repr__(self):
         """
