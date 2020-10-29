@@ -19,7 +19,6 @@ class Schedule:
         self.weeks = weeks
 
 
-
 class Week:
     """
     We define a week by the work days it is made of
@@ -27,7 +26,6 @@ class Week:
 
     def __init__(self, days):
         self.days = days
-
 
 
 class Day:
