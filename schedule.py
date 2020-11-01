@@ -1,7 +1,7 @@
 """
 This file defines the class Task for our planning system
 
-   Jean-Loup Raymond & Benjamin Roulin & Aaron Fargeon
+   Aaron Fargeon
    ENPC - (c) 05/10/2020
 
 """

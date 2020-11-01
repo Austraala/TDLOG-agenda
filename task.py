@@ -1,7 +1,7 @@
 """
 This file defines the class Task for our planning system
 
-   Jean-Loup Raymond & Benjamin Roulin & Aaron Fargeon
+   Jean-Loup Raymond
    ENPC - (c) 05/10/2020
 
 """
@@ -99,7 +99,7 @@ class MobileTask(Task):
         difficulty : difficulty/10, labels : [labels]) assigned on assignment_date
         to do before deadline, in divisions times
         """
-        return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date) \
+        return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date)[:10] \
                + ", to do before " + str(self.deadline) + ", in " + str(self.divisions) + " times"
 
     def __eq__(self, other):
