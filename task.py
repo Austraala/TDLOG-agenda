@@ -39,6 +39,7 @@ class Task:
 
     def __eq__(self, other):
         """ Returns True if everything is the same """
+
         return (self.name == other.name and self.duration == other.duration
                 and self.difficulty == other.difficulty and self.labels == other.labels)
 
@@ -50,13 +51,13 @@ class FixedTask(Task):
     """
 
     def __init__(self, task, beginning_date, recurring):
-        # We call the __init__ function of the class Task
+        """
+        We call the __init__ function of the class Task
+        and we define the additional parameters
+        """
+
         super().__init__(task.name, task.duration, task.difficulty)
-
-        # We define the beginning date of the task
         self.beginning_date = beginning_date
-
-        # If it is a recurring task, then add a label "recurring" to it
         if recurring:
             self.labels.append("recurring")
 
@@ -82,12 +83,13 @@ class MobileTask(Task):
     """
 
     def __init__(self, task, deadline, attached, divisions):
-        # We call the __init__ function of the class Task
+        """
+        We call the __init__ function of the class Task
+        and we define the additional parameters
+        """
+
         super().__init__(task.name, task.duration, task.difficulty)
-
-        # We store the time of assignment in the object class
         self.assignment_date = datetime.datetime.now()
-
         self.deadline = deadline
         self.labels.append(attached)
         self.divisions = divisions
@@ -99,11 +101,13 @@ class MobileTask(Task):
         difficulty : difficulty/10, labels : [labels]) assigned on assignment_date
         to do before deadline, in divisions times
         """
+
         return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date)[:10] \
                + ", to do before " + str(self.deadline) + ", in " + str(self.divisions) + " times"
 
     def __eq__(self, other):
         """ Returns True if everything besides
         assignment_date is the same """
+
         return (super().__eq__(other) * (self.deadline == other.deadline)
                 * (self.divisions == other.divisions))
