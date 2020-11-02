@@ -2,7 +2,7 @@
 This file defines the class Task for our planning system
 
    Jean-Loup Raymond
-   ENPC - (c) 05/10/2020
+   ENPC - (c)
 
 """
 

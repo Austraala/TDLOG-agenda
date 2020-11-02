@@ -2,7 +2,7 @@
 This is a pytest file. To run with pytest
 
    Jean-Loup Raymond
-   ENPC - (c) 05/10/2020
+   ENPC - (c)
 
 """
 

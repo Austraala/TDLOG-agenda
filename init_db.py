@@ -2,22 +2,27 @@
 This file sets up a database for the project
 
    Jean-Loup Raymond
-   ENPC - (c) 05/10/2020
+   ENPC - (c)
 
 """
 
 import sqlite3
+import crypto
 
 connection = sqlite3.connect('database.db')
-
 
 with open('schema.sql') as file:
     connection.executescript(file.read())
 
 cursor = connection.cursor()
 
-cursor.execute("INSERT INTO users (first_name, last_name, gender, birth_date, email) VALUES (?, ?, ?, ?, ?)",
-               ('First Name', 'Last name', 'Gender', 'Birth date', 'E-mail address')
+cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
+               ('User name', 'Hashed Password', 'Gender', 'E-mail address')
+               )
+
+cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
+               ("Jean-Loup.RAYMOND", crypto.encrypt('test_pass_word'.encode('utf-8')),
+                'M', 'jean-loup.raymond@ponts.org')
                )
 
 connection.commit()
