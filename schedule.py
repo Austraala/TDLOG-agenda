@@ -7,7 +7,7 @@ This file defines the class Task for our planning system
 """
 
 # Imports
-import task
+# import task
 
 
 class Day:
@@ -25,8 +25,8 @@ class Day:
         print(self.five_minute_slots)
 
     def __repr__(self):
-        # Renvoyer plus de détails : fonctions sur task
-        print([self.five_minute_slots[0]] + [self.five_minute_slots[i] for i in range(1, len(self.five_minute_slots)) if self.five_minute_slots[i] != self.five_minute_slots[i-1]])
+        for duty in [self.five_minute_slots[0]] + [self.five_minute_slots[i] for i in range(1, len(self.five_minute_slots)) if self.five_minute_slots[i] != self.five_minute_slots[i-1]]:
+            duty.__repr__()
 
     def implement_task(self, duty):
         for i in range(duty.beginning_date, duty.beginning_date + duty.duration):
