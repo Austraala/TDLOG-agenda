@@ -26,11 +26,11 @@ class Day:
 
     def __repr__(self):
         # Renvoyer plus de détails : fonctions sur task
-        print([self.five_minute_slots[0]] + [self.five_minute_slots[i] for i in renge(1, len(self.five_minute_slots)) if self.five_minute_slots[i] != self.five_minute_slots[i-1]])
+        print([self.five_minute_slots[0]] + [self.five_minute_slots[i] for i in range(1, len(self.five_minute_slots)) if self.five_minute_slots[i] != self.five_minute_slots[i-1]])
 
-    def implement_task(self, task):
-        for i in range(task.beginning_date, task.beginning_date + task.duration):
-            self.five_minute_slots[i] = task
+    def implement_task(self, duty):
+        for i in range(duty.beginning_date, duty.beginning_date + duty.duration):
+            self.five_minute_slots[i] = duty
 
 
 class Week:
@@ -70,6 +70,6 @@ class Schedule:
         for week in self.weeks:
             week.__repr__()
 
-    def implement_recurring_task(self, task, day_number):
+    def implement_recurring_task(self, duty, day_number):
         for week in self.weeks:
-            week.days[day_number].implement_task(task)
+            week.days[day_number].implement_task(duty)
