@@ -15,8 +15,8 @@ class Day:
     We define a day by the tasks completed in each of its five minute slots
     """
 
-    def __init__(self, length):
-        self.five_minute_slots = []*length
+    def __init__(self):
+        self.five_minute_slots = [] * 288
 
     def __eq__(self, other):
         return self.five_minute_slots == other.five_minute_slots
@@ -38,8 +38,8 @@ class Week:
     We define a week by the work days it is made of
     """
 
-    def __init__(self, length):
-        self.days = []*length
+    def __init__(self):
+        self.days = [] * 7
 
     def __eq__(self, other):
         return self.days == other.days
