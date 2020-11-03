@@ -20,7 +20,6 @@ task_try = task.Task('Try', 10, 5)
 fixed_task_try = task.FixedTask(task_try, '16/04/2000', False)
 # Task, deadline, attached, number of divisions possible
 mobile_task_try = task.MobileTask(task_try, 'november 10th', 'Maths', 3)
-[None, task_try, task_try, task_try, None, task_try, None]
 day_try = schedule.Day()
 day_try.five_minute_slots[:6] = [None, None, None, task_try, None, task_try, None]
 day_try_2 = schedule.Day()
@@ -38,6 +37,7 @@ schedule_try.weeks[:1] = [week_try, week_try_2]
 # ---------------------------
 def test_repr_task():
     """ Tests the correct behaviour of __repr__ for tasks"""
+
     assert task_try.__repr__() == \
            "Task(name : Try, duration : 10 minutes, difficulty : 5/10, labels : [])"
     assert fixed_task_try.__repr__() == \
@@ -52,6 +52,7 @@ def test_repr_task():
 # ---------------------------
 def test_eq_task():
     """ Tests the correct behaviour of __eq__ for tasks"""
+
     assert task_try != task.Task('Try 2', 10, 5)
     assert task_try != task.Task('Try', 8, 5)
     assert task_try != task.Task('Try', 10, 6)
@@ -60,6 +61,7 @@ def test_eq_task():
 # ---------------------------
 def test_repr_schedule():
     """ To change to assert once __repr__ is finished """
+
     # print(day_try)
     # print(week_try)
     # print(schedule_try)

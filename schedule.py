@@ -6,6 +6,7 @@ This file defines the class Task for our planning system
 
 """
 
+
 # Imports
 # import task
 
@@ -25,12 +26,22 @@ class Day:
         print(self.five_minute_slots)
 
     def __repr__(self):
-        for duty in [self.five_minute_slots[0]] + [self.five_minute_slots[i] for i in range(1, len(self.five_minute_slots)) if self.five_minute_slots[i] != self.five_minute_slots[i-1]]:
-            duty.__repr__()
+        # ATTENTION A CORRIGER : REPR de task a priori pas possible (taille str trop grande.
+        # Risque de devenir du front, mais tests nécessaires
+        for task in [self.five_minute_slots[0]] + [self.five_minute_slots[i]
+                                                   for i in range(1, len(self.five_minute_slots))
+                                                   if (self.five_minute_slots[i] !=
+                                                       self.five_minute_slots[i - 1])]:
+            task.__repr__()
 
-    def implement_task(self, duty):
-        for i in range(duty.beginning_date, duty.beginning_date + duty.duration):
-            self.five_minute_slots[i] = duty
+    def implement_task(self, task):
+        """ adds the task to the day planning """
+        # ATTENTION A CORRIGER : le format de beginning_date est une date, pas un entier.
+        # Prendre simplement range(task.duration // 5 ) ??
+        # ATTENTION : générer l'heure de début avant le for.
+        # Tests NECESSAIRES
+        for i in range(task.beginning_date, task.beginning_date + task.duration):
+            self.five_minute_slots[i] = task
 
 
 class Week:
@@ -70,6 +81,8 @@ class Schedule:
         for week in self.weeks:
             week.__repr__()
 
-    def implement_recurring_task(self, duty, day_number):
+    def implement_recurring_task(self, task, day_number):
+        """ Adds a recurring task to the planning, every week """
+
         for week in self.weeks:
-            week.days[day_number].implement_task(duty)
+            week.days[day_number].implement_task(task)

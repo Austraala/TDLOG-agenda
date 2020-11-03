@@ -8,7 +8,7 @@ This is the main file for dev
 
 import flask as f
 import command_db as db
-import crypto
+from crypto import compare
 
 app = f.Flask(__name__)
 app.debug = True
@@ -18,6 +18,8 @@ Session = {}
 
 @app.route('/')
 def log():
+    """ Displays a welcome page with log in / sign in possibilities """
+
     if 'username' in Session:
         username = Session['username']
         return 'Logged in as ' + username + '<br>' + \
@@ -28,6 +30,8 @@ def log():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    """ Allows user to sign in """
+
     if f.request.method == 'POST':
         db.add_user(f.request.form['username'], f.request.form['password'],
                     f.request.form['gender'], f.request.form['email'])
@@ -38,13 +42,14 @@ def register():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     """ If the connection information fits database, create a session"""
+
     if f.request.method == 'POST':
-        username_try = f.request.form['username']
-        password_try = f.request.form['password'].encode('utf-8')
-        request = "SELECT * FROM users WHERE username = '{0}'".format(username_try)
+        username_form = f.request.form['username']
+        password_form = f.request.form['password'].encode('utf-8')
+        request = "SELECT * FROM users WHERE username = '{0}'".format(username_form)
         for user in db.use_db(request):
-            if crypto.compare(password_try, user[2]):
-                Session['username'] = username_try
+            if compare(password_form, user[2]):
+                Session['username'] = username_form
                 return f.redirect(f.url_for('log'))
     return f.render_template("login.html")
 
@@ -52,6 +57,7 @@ def login():
 @app.route('/logout')
 def logout():
     """ Remove the username from the session if it is there """
+
     Session.pop('username', None)
     return f.redirect(f.url_for('log'))
 

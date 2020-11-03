@@ -7,7 +7,7 @@ This file sets up a database for the project
 """
 
 import sqlite3
-import crypto
+from crypto import encrypt
 
 connection = sqlite3.connect('database.db')
 
@@ -21,7 +21,7 @@ cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?,
                )
 
 cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
-               ('Jean-Loup.RAYMOND', crypto.encrypt('test_pass_word'.encode('utf-8')),
+               ('Jean-Loup.RAYMOND', encrypt('test_pass_word'.encode('utf-8')),
                 'M', 'jean-loup.raymond@ponts.org')
                )
 
