@@ -9,8 +9,6 @@ This file contains functions to encrypt and decrypt a password
 
 import bcrypt
 
-pwd = 'test_pass_word'.encode('utf-8')
-
 
 def encrypt(password):
     salt = bcrypt.gensalt(rounds=16)

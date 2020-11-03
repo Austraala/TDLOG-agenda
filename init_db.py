@@ -21,7 +21,7 @@ cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?,
                )
 
 cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
-               ("Jean-Loup.RAYMOND", crypto.encrypt('test_pass_word'.encode('utf-8')),
+               ('Jean-Loup.RAYMOND', crypto.encrypt('test_pass_word'.encode('utf-8')),
                 'M', 'jean-loup.raymond@ponts.org')
                )
 

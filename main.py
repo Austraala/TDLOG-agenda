@@ -29,7 +29,7 @@ def log():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if f.request.method == 'POST':
-        db.add_user(f.request.form['username'], crypto.encrypt(f.request.form['password']),
+        db.add_user(f.request.form['username'], f.request.form['password'],
                     f.request.form['gender'], f.request.form['email'])
         return f.redirect(f.url_for('log'))
     return f.render_template("register.html")
@@ -41,7 +41,7 @@ def login():
     if f.request.method == 'POST':
         username_try = f.request.form['username']
         password_try = f.request.form['password'].encode('utf-8')
-        request = '''SELECT * FROM users WHERE username = "{0}"'''.format(username_try)
+        request = "SELECT * FROM users WHERE username = '{0}'".format(username_try)
         for user in db.use_db(request):
             if crypto.compare(password_try, user[2]):
                 Session['username'] = username_try
