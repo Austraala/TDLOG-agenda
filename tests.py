@@ -21,12 +21,12 @@ fixed_task_try = task.FixedTask(task_try, '16/04/2000', False)
 # Task, deadline, attached, number of divisions possible
 mobile_task_try = task.MobileTask(task_try, 'november 10th', 'Maths', 3)
 
-day_try = schedule.Day([None, None, None, task_try, None, task_try, None])
-day_try_2 = schedule.Day([None, None, task_try, task_try, None, task_try, None])
-day_try_3 = schedule.Day([None, task_try, task_try, task_try, None, task_try, None])
-week_try = schedule.Week([day_try, day_try_2])
-week_try_2 = schedule.Week([day_try, day_try_3])
-schedule_try = schedule.Schedule([week_try, week_try_2])
+day_try = [None, None, None, task_try, None, task_try, None] + schedule.Day()[5:]
+day_try_2 = [None, None, task_try, task_try, None, task_try, None] + schedule.Day()[5:]
+day_try_3 = [None, task_try, task_try, task_try, None, task_try, None] + schedule.Day()[5:]
+week_try = [day_try, day_try_2] + schedule.Week()[2:]
+week_try_2 = [day_try, day_try_3] + schedule.Week()[2:]
+schedule_try = [week_try, week_try_2] + schedule.Schedule(3)[2:]
 
 
 # ---------------------------
