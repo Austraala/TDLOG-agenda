@@ -8,21 +8,57 @@ This file defines the class Task for our planning system
 
 # Imports
 import datetime
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
+Base = declarative_base()
 
 
-class Task:
+class User(Base):
+    """ We define the class User """
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True)
+    password = Column(String)
+    gender = Column(String(1))
+    email = Column(String)
+    tasks = None
+
+    def __init__(self, username, password, gender, email):
+        """ We set up an user """
+        self.username = username
+        self.password = password
+        self.gender = gender
+        self.email = email
+        self.tasks = []
+
+    def __repr__(self):
+        return "id : " + str(self.id) + ", username : " + str(self.username)
+
+
+class Task(Base):
     """
     We define a Task by its day of assignment, duration, name,
     difficulty and a variety of labels to organize the planning properly
     """
+    __tablename__ = 'tasks'
 
-    def __init__(self, name, duration, difficulty):
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    name = Column(String, unique=True)
+    duration = Column(Integer)
+    difficulty = Column(Integer)
+    user = relationship("User", back_populates="tasks")
+
+    def __init__(self, user_id, name, duration, difficulty):
         """ We get the duration, name, difficulty and labels from the user """
 
+        self.user_id = user_id
         self.name = name
         self.duration = duration
         self.difficulty = difficulty
-        self.labels = []
         self.beginning_date = None
 
     def __repr__(self):
@@ -35,13 +71,16 @@ class Task:
         return "Task(name : " + str(self.name) \
                + ", duration : " + str(self.duration) \
                + " minutes, difficulty : " + str(self.difficulty) \
-               + "/10, labels : " + str(self.labels) + ")"
+               + "/10)"
 
     def __eq__(self, other):
         """ Returns True if everything is the same """
 
         return (self.name == other.name and self.duration == other.duration
-                and self.difficulty == other.difficulty and self.labels == other.labels)
+                and self.difficulty == other.difficulty)
+
+
+User.tasks = relationship("Task", order_by=Task.id, back_populates="user")
 
 
 class FixedTask(Task):
@@ -49,6 +88,13 @@ class FixedTask(Task):
     We define a FixedTask class to model properly Tasks
     that have a defined time stamp
     """
+    __tablename__ = 'fixed_tasks'
+
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey('tasks.id'))
+    beginning_date = Column(Integer)
+    recurring = Column(Boolean)
+    task = relationship("Task", back_populates="task_type_id")
 
     def __init__(self, task, beginning_date, recurring):
         """
@@ -56,10 +102,10 @@ class FixedTask(Task):
         and we define the additional parameters
         """
 
-        super().__init__(task.name, task.duration, task.difficulty)
+        super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.beginning_date = beginning_date
         if recurring:
-            self.labels.append("recurring")
+            self.assign_label("recurring")
 
     def __repr__(self):
         """
@@ -76,11 +122,21 @@ class FixedTask(Task):
         return super().__eq__(other) * (self.beginning_date == other.beginning_date)
 
 
+Task.task_type_id = relationship("FixedTask", back_populates="task")
+
+
 class MobileTask(Task):
     """
     We define a MobileTask to properly model Tasks that
     don't have a defined timestamp and can be placed
     """
+    __tablename__ = 'mobile_tasks'
+
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey('tasks.id'))
+    deadline = Column(Integer)
+    division = Column(Integer)
+    task = relationship("Task", back_populates="task_type_id")
 
     def __init__(self, task, deadline, attached, divisions):
         """
@@ -88,7 +144,7 @@ class MobileTask(Task):
         and we define the additional parameters
         """
 
-        super().__init__(task.name, task.duration, task.difficulty)
+        super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
         self.labels.append(attached)
@@ -111,3 +167,6 @@ class MobileTask(Task):
 
         return (super().__eq__(other) * (self.deadline == other.deadline)
                 * (self.divisions == other.divisions))
+
+
+Task.task_type_id = relationship("FixedTask", back_populates="task")

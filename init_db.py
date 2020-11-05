@@ -5,25 +5,38 @@ This file sets up a database for the project
    ENPC - (c)
 
 """
+import crypto
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-import sqlite3
-from crypto import encrypt
+from task import Base, User, Task, FixedTask, MobileTask
 
-connection = sqlite3.connect('database.db')
+# Sets things up for sqlalchemy
+engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
 
-with open('schema.sql') as file:
-    connection.executescript(file.read())
+# Destroys previous database
+Base.metadata.drop_all(engine)
 
-cursor = connection.cursor()
+# Creates new database
+Base.metadata.create_all(engine)
 
-cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
-               ('User name', 'Hashed Password', 'Gender', 'E-mail address')
-               )
+# Prepares an user
+user_dummy = User('Archlinux', crypto.encrypt('Bullshit'), 'M', 'mail')
+session.add(user_dummy)
+session.commit()
 
-cursor.execute("INSERT INTO users (username, password, gender, email) VALUES (?, ?, ?, ?)",
-               ('Jean-Loup.RAYMOND', encrypt('test_pass_word'.encode('utf-8')),
-                'M', 'jean-loup.raymond@ponts.org')
-               )
+# Creates dummy
+task_dummy = Task(session.query("id FROM users WHERE username = 'Archlinux'").first()[0], 'Math', 10, 10)
+user_dummy.tasks = [task_dummy]
+session.add(task_dummy)
+session.commit()
+# Add it to the database
+session.add(task_dummy)
+session.commit()
 
-connection.commit()
-connection.close()
+session.close()
+
+print(session.query(User).all())
+print(session.query(Task).all())
