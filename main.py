@@ -11,7 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 import crypto
-from task import User
+from task import User, Task
 
 # Sets things up for sqlalchemy
 engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
@@ -31,8 +31,9 @@ def log():
         username = logged_in_list[-1]
         session = Session()
         user = session.query(User).filter(User.username == username).first()
+        task_list = session.query(Task).filter(Task.user_id == User.id).all()
         session.close()
-        return f.render_template("home.html", user=user)
+        return f.render_template("home.html", user=user, tasks=task_list)
     return "You are not logged in <br><a href = '/login'></b>click here to log in</b>" \
            "</a><a href = '/register'></b>click here to sign in</b></a>"
 

@@ -98,11 +98,10 @@ class FixedTask(Task):
     """
     __tablename__ = 'fixed_tasks'
 
-    id = Column(Integer, primary_key=True)
-    task_id = Column(Integer, ForeignKey('tasks.id'))
+    id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
     beginning_date = Column(Integer)
     recurring = Column(Boolean)
-    task = relationship("Task", back_populates="task_type_id")
+    task = relationship("Task", back_populates="fixed_task_id")
 
     def __init__(self, task, beginning_date, recurring):
         """
@@ -130,7 +129,7 @@ class FixedTask(Task):
         return super().__eq__(other) * (self.beginning_date == other.beginning_date)
 
 
-Task.task_type_id = relationship("FixedTask", back_populates="task")
+Task.fixed_task_id = relationship("FixedTask", back_populates="task")
 
 
 class MobileTask(Task):
@@ -140,11 +139,10 @@ class MobileTask(Task):
     """
     __tablename__ = 'mobile_tasks'
 
-    id = Column(Integer, primary_key=True)
-    task_id = Column(Integer, ForeignKey('tasks.id'))
+    id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
     deadline = Column(Integer)
     division = Column(Integer)
-    task = relationship("Task", back_populates="task_type_id")
+    task = relationship("Task", back_populates="mobile_task_id")
 
     def __init__(self, task, deadline, attached, divisions):
         """
@@ -177,4 +175,4 @@ class MobileTask(Task):
                 * (self.divisions == other.divisions))
 
 
-Task.task_type_id = relationship("FixedTask", back_populates="task")
+Task.mobile_task_id = relationship("FixedTask", back_populates="task")
