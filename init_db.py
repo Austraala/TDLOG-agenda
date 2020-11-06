@@ -5,11 +5,13 @@ This file sets up a database for the project
    ENPC - (c)
 
 """
-import crypto
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from task import Base, User, Task, FixedTask, MobileTask
+import crypto
+from task import Base, User, Task
+
+# pylint: disable=E1101
 
 # Sets things up for sqlalchemy
 engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
@@ -28,7 +30,8 @@ session.add(user_dummy)
 session.commit()
 
 # Creates dummy
-task_dummy = Task(session.query("id FROM users WHERE username = 'Archlinux'").first()[0], 'Math', 10, 10)
+task_dummy = Task(session.query("id FROM users WHERE username = 'Archlinux'")
+                  .first()[0], 'Math', 10, 10)
 user_dummy.tasks = [task_dummy]
 session.add(task_dummy)
 session.commit()

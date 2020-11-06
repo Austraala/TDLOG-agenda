@@ -5,6 +5,7 @@ This file defines the class Task for our planning system
    ENPC - (c)
 
 """
+# pylint: disable=E1101
 
 # Imports
 import datetime
@@ -28,6 +29,7 @@ class User(Base):
 
     def __init__(self, username, password, gender, email):
         """ We set up an user """
+
         self.username = username
         self.password = password
         self.gender = gender
@@ -35,7 +37,13 @@ class User(Base):
         self.tasks = []
 
     def __repr__(self):
-        return "id : " + str(self.id) + ", username : " + str(self.username)
+        return str(self.username)
+
+    def __eq__(self, other):
+        """
+        2 Users are equal if their username is the same
+        """
+        return self.username == other.username
 
 
 class Task(Base):
