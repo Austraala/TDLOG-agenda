@@ -33,7 +33,7 @@ def log():
         user = session.query(User).filter(User.username == username).first()
         task_list = session.query(Task).filter(Task.user_id == User.id).all()
         session.close()
-        return f.render_template("home.html", user=user, tasks=task_list)
+        return f.render_template("navbar.html") + f.render_template("home.html", user=user, tasks=task_list)
     return "You are not logged in <br><a href = '/login'></b>click here to log in</b>" \
            "</a><a href = '/register'></b>click here to sign in</b></a>"
 
