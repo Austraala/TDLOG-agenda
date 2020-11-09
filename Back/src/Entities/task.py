@@ -10,40 +10,8 @@ This file defines the class Task for our planning system
 # Imports
 import datetime
 from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
-Base = declarative_base()
-
-
-class User(Base):
-    """ We define the class User """
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True)
-    password = Column(String)
-    gender = Column(String(1))
-    email = Column(String)
-    tasks = None
-
-    def __init__(self, username, password, gender, email):
-        """ We set up an user """
-
-        self.username = username
-        self.password = password
-        self.gender = gender
-        self.email = email
-        self.tasks = []
-
-    def __repr__(self):
-        return str(self.username)
-
-    def __eq__(self, other):
-        """
-        2 Users are equal if their username is the same
-        """
-        return self.username == other.username
+from .user import Base, User
 
 
 class Task(Base):
