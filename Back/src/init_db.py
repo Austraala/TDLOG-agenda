@@ -8,8 +8,8 @@ This file sets up a database for the project
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import crypto
-from task import Base, User, Task
+from Algorithm.crypto import encrypt
+from Entities.task import Base, User, Task
 
 # pylint: disable=E1101
 
@@ -25,7 +25,7 @@ Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 # Prepares an user
-user_dummy = User('Archlinux', crypto.encrypt('Bullshit'), 'M', 'mail')
+user_dummy = User('Archlinux', encrypt('Bullshit'), 'M', 'mail')
 session.add(user_dummy)
 session.commit()
 

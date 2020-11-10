@@ -5,10 +5,13 @@ This file defines the class Task for our planning system
    ENPC - (c) 05/10/2020
 
 """
-
+# pylint: disable=E1101
 
 # Imports
-# import task
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
+# from .user import Base, User
+# from .task import Task, FixedTask, MobileTask
 
 
 class Day:
