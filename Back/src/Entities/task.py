@@ -121,7 +121,7 @@ class MobileTask(Task):
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
-        self.labels.append(attached)
+        #self.labels.append(attached)
         self.divisions = divisions
 
     def __repr__(self):
