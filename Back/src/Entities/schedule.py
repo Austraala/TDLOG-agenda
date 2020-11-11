@@ -10,14 +10,81 @@ This file defines the class Task for our planning system
 # Imports
 from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
-# from .user import Base, User
-# from .task import Task, FixedTask, MobileTask
+from .user import Base, User
+from .task import Task, FixedTask
 
 
-class Day:
+class Schedule(Base):
+    """
+    We define a schedule by the content of its work weeks
+    """
+    __tablename__ = 'schedules'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="schedule")
+
+    def __init__(self, length):
+        self.weeks = [] * length
+
+    def __eq__(self, other):
+        return self.weeks == other.weeks
+
+    def __str__(self):
+        print(self.weeks)
+
+    def __repr__(self):
+        for week in self.weeks:
+            week.__repr__()
+
+    def implement_recurring_task(self, task, day_number):
+        """ Adds a recurring task to the planning, every week """
+
+        for week in self.weeks:
+            week.days[day_number].implement_task(task)
+
+
+User.schedule = relationship("Schedule", order_by=Schedule.id, back_populates="user")
+
+
+class Week(Base):
+    """
+    We define a week by the work days it is made of
+    """
+    __tablename__ = 'weeks'
+
+    id = Column(Integer, primary_key=True)
+    schedule_id = Column(Integer, ForeignKey('schedules.id'))
+    schedule = relationship("Schedule", back_populates="weeks")
+
+    def __init__(self):
+        self.days = [] * 7
+
+    def __eq__(self, other):
+        return self.days == other.days
+
+    def __str__(self):
+        print(self.days)
+
+    def __repr__(self):
+        for day in self.days:
+            day.__repr__()
+
+
+Schedule.weeks = relationship("Week", back_populates="schedule")
+
+
+class Day(Base):
     """
     We define a day by the tasks completed in each of its five minute slots
     """
+    __tablename__ = 'days'
+
+    id = Column(Integer, primary_key=True)
+    week_id = Column(Integer, ForeignKey('weeks.id'))
+    week = relationship("Week", back_populates="days")
+    fixed_task_id = Column(Integer, ForeignKey('fixed_tasks.id'))
+    fixed_task = relationship("FixedTask", back_populates="day")
 
     def __init__(self):
         self.five_minute_slots = [] * 288
@@ -47,45 +114,5 @@ class Day:
             self.five_minute_slots[i] = task
 
 
-class Week:
-    """
-    We define a week by the work days it is made of
-    """
-
-    def __init__(self):
-        self.days = [] * 7
-
-    def __eq__(self, other):
-        return self.days == other.days
-
-    def __str__(self):
-        print(self.days)
-
-    def __repr__(self):
-        for day in self.days:
-            day.__repr__()
-
-
-class Schedule:
-    """
-    We define a schedule by the content of its work weeks
-    """
-
-    def __init__(self, length):
-        self.weeks = [] * length
-
-    def __eq__(self, other):
-        return self.weeks == other.weeks
-
-    def __str__(self):
-        print(self.weeks)
-
-    def __repr__(self):
-        for week in self.weeks:
-            week.__repr__()
-
-    def implement_recurring_task(self, task, day_number):
-        """ Adds a recurring task to the planning, every week """
-
-        for week in self.weeks:
-            week.days[day_number].implement_task(task)
+Week.days = relationship("Day", back_populates="week")
+FixedTask.day = relationship("Day", back_populates="fixed_task")
