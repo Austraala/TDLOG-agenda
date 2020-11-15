@@ -186,7 +186,10 @@ def optimize(list_tasks, current_week, current_day):
     list_constraints = sort_time_constraints(smooth_time_constraints(get_constraints(list_tasks)))
     list_tasks = sort_mobile_tasks(list_tasks)
     for mobile_task in list_tasks:
-        day = current_day
+        if current_day == 6 :
+            day = 0
+        else :
+            day = current_day+1
         week = current_week
         while not(find_time_today(list_constraints, mobile_task, day, week)):
             if day == 6:
@@ -194,6 +197,7 @@ def optimize(list_tasks, current_week, current_day):
                 week += 1
             else:
                 day += 1
+    return list_constraints
 
 
 """
@@ -201,9 +205,39 @@ def optimize(list_tasks, current_week, current_day):
     
     How it works :
     It takes over after the Naive Optimization.
-    I. Check if a couple of random tasks can be swapped.
-    II. Swap two tasks and update list_constraints.
-    III. Calculate score of each day :
+    I. Save a mobile_task_list
+    II. Check if a couple of random tasks can be swapped.
+    III. Swap two tasks and update list_constraints.
+    IV. Calculate score of each day :
         - Sum of the difficulties of each task of the day, squared.
         - Sum of the distance-to-deadline of each Mobile task, in days.
+        - You sum it all up, you need to have the lowest score possible.
+    V. Compare two mobile_task_lists. 
 """
+
+
+def check_possible_swap(list_constraints, mobile_task1, mobile_task2):
+    """
+    This function does two things, just in case :
+    - It orders list_constraints in ascending order.
+    - It finds the two mobile_tasks and determines their available_time_slot, that means it determines :
+        "starting time of the next task - starting time of the mobile task"
+    - if their respective duration fit in each other's available time, slot, it returns True.
+    - otherwise, it returns False.
+    """
+    sort_time_constraints(list_constraints)
+
+    #   Get some variables (easier to read this way)
+    day1 = mobile_task1.day
+    day2 = mobile_task2.day
+    week1 = mobile_task1.week
+    week2 = mobile_task2.week
+    starting_time1 = mobile_task1.starting_time
+    starting_time2 = mobile_task2.starting
+    ending_time1 = starting_time1 + mobile_task1.duration
+    ending_time2 = starting_time2 + mobile_task2.duration
+
+    #   Find the
+    index_1 = list_constraints.index([week1, day1, starting_time1, ending_time1])
+    index_2 = list_constraints.index([week2, day2, starting_time2, ending_time2])
+
