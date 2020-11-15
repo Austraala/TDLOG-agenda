@@ -7,10 +7,9 @@ This file defines the process through which we assign a starting date to each ta
 
 # Imports
 import task
-# import scipy
 
-#   REAL THING
 """
+    PART A - NAIVE OPTIMIZATION
     How it works :
     I.
     - Get today's date : the algorithm will only put tasks for the next day, or the day after that. It won't
@@ -139,13 +138,7 @@ def compare_mobile_tasks(mobile_task1, mobile_task2):
     It returns -1 if the deadline of the first task is before the deadline of the second one
         and +1 otherwise.
     """
-    if mobile_task1.deadline[0] < mobile_task2.deadline[0]:
-        return -1
-    elif mobile_task1.deadline[1] < mobile_task2.deadline[1]:
-        return -1
-    elif mobile_task1.deadline[2] <= mobile_task2.deadline[2]:
-        return -1
-    return 1
+    compare_time_constraints(mobile_task1.deadline, mobile_task2.deadline)
 
 
 def sort_mobile_tasks(list_tasks_to_implement):
@@ -201,3 +194,16 @@ def optimize(list_tasks, current_week, current_day):
                 week += 1
             else:
                 day += 1
+
+
+"""
+    PART B - OPTIMIZATION WITH SHUFFLE
+    
+    How it works :
+    It takes over after the Naive Optimization.
+    I. Check if a couple of random tasks can be swapped.
+    II. Swap two tasks and update list_constraints.
+    III. Calculate score of each day :
+        - Sum of the difficulties of each task of the day, squared.
+        - Sum of the distance-to-deadline of each Mobile task, in days.
+"""
