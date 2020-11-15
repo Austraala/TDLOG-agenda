@@ -7,19 +7,22 @@ This is the main file for dev
 """
 
 import flask as f
+from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from Back.src.Algorithm.crypto import encrypt, compare
 from Back.src.Entities.user import User
 from Back.src.Entities.task import Task
+from Back.src.Entities.schemas import UserSchema
+
+app = f.Flask(__name__, static_folder="Front/src/Static", template_folder="Front/src/Templates")
+CORS(app)
 
 # Sets things up for sqlalchemy
 engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
-app = f.Flask(__name__, static_folder="Front/Static", template_folder="Front/Templates")
-app.debug = True
 
 logged_in_list = []
 
@@ -88,6 +91,40 @@ def logout(username):
     print(logged_in_list, '{}'.format(username))
     logged_in_list.remove('{}'.format(username))
     return f.redirect(f.url_for('log'))
+
+
+@app.route('/users')
+def get_users():
+    # fetching from the database
+    session = Session()
+    user_objects = session.query(User).all()
+
+    # transforming into JSON-serializable objects
+    schema = UserSchema(many=True)
+    users = schema.dump(user_objects)
+
+    # serializing as JSON
+    session.close()
+    return f.jsonify(users)
+
+
+@app.route('/users', methods=['POST'])
+def add_exam():
+    # mount exam object
+    posted_user = UserSchema(only='username')\
+        .load(f.request.get_json())
+
+    user = User(**posted_user.data, created_by="HTTP post request")
+
+    # persist exam
+    session = Session()
+    session.add(user)
+    session.commit()
+
+    # return created exam
+    new_exam = UserSchema().dump(user).data
+    session.close()
+    return f.jsonify(new_exam), 201
 
 
 if __name__ == '__main__':

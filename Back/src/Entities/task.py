@@ -23,10 +23,10 @@ class Task(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="tasks")
     name = Column(String, unique=True)
     duration = Column(Integer)
     difficulty = Column(Integer)
-    user = relationship("User", back_populates="tasks")
 
     def __init__(self, user_id, name, duration, difficulty):
         """ We get the duration, name, difficulty and labels from the user """
@@ -69,7 +69,7 @@ class FixedTask(Task):
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
     beginning_date = Column(Integer)
     recurring = Column(Boolean)
-    task = relationship("Task", back_populates="fixed_task_id")
+    task = relationship("Task", back_populates="fixed_task")
 
     def __init__(self, task, beginning_date, recurring):
         """
@@ -97,7 +97,7 @@ class FixedTask(Task):
         return super().__eq__(other) * (self.beginning_date == other.beginning_date)
 
 
-Task.fixed_task_id = relationship("FixedTask", back_populates="task")
+Task.fixed_task = relationship("FixedTask", back_populates="task")
 
 
 class MobileTask(Task):
@@ -110,7 +110,7 @@ class MobileTask(Task):
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
     deadline = Column(Integer)
     division = Column(Integer)
-    task = relationship("Task", back_populates="mobile_task_id")
+    task = relationship("Task", back_populates="mobile_task")
 
     def __init__(self, task, deadline, attached, divisions):
         """
@@ -121,7 +121,7 @@ class MobileTask(Task):
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
-        self.labels.append(attached)
+        #self.labels.append(attached)
         self.divisions = divisions
 
     def __repr__(self):
@@ -143,4 +143,4 @@ class MobileTask(Task):
                 * (self.divisions == other.divisions))
 
 
-Task.mobile_task_id = relationship("FixedTask", back_populates="task")
+Task.mobile_task = relationship("FixedTask", back_populates="task")

@@ -9,7 +9,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from Algorithm.crypto import encrypt
-from Entities.task import Base, User, Task
+from Entities.user import User
+from Entities.task import Base, Task
+from Entities.schedule import Schedule, Week, Day
 
 # pylint: disable=E1101
 

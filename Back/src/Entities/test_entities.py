@@ -18,7 +18,7 @@ task_try = Task(0, 'Try', 10, 5)
 # Task, beginning_date, Recurring
 fixed_task_try = FixedTask(task_try, '16/04/2000', False)
 # Task, deadline, attached, number of divisions possible
-mobile_task_try = MobileTask(task_try, 'november 10th', 'Maths', 3)
+#mobile_task_try = MobileTask(task_try, 'november 10th', 'Maths', 3)
 day_try = Day()
 day_try.five_minute_slots[:6] = [None, None, None, task_try, None, task_try, None]
 day_try_2 = Day()
@@ -38,14 +38,14 @@ def test_repr_task():
     """ Tests the correct behaviour of __repr__ for tasks"""
 
     assert task_try.__repr__() == \
-           "Task(name : Try, duration : 10 minutes, difficulty : 5/10, labels : [])"
+           "Task(name : Try, duration : 10 minutes, difficulty : 5/10)"
     assert fixed_task_try.__repr__() == \
-           "FixedTask(name : Try, duration : 10 minutes, difficulty : 5/10, labels : [])" \
+           "FixedTask(name : Try, duration : 10 minutes, difficulty : 5/10)" \
            " begins on : 16/04/2000"
-    assert mobile_task_try.__repr__() == "MobileTask(name : Try, duration : 10 minutes," \
-                                         " difficulty : 5/10, labels : ['Maths'])" \
-                                         " assigned on {}, to do before november 10th," \
-                                         " in 3 times".format(str(datetime.datetime.now())[:10])
+    # assert mobile_task_try.__repr__() == "MobileTask(name : Try, duration : 10 minutes," \
+    #                                      " difficulty : 5/10, labels : ['Maths'])" \
+    #                                      " assigned on {}, to do before november 10th," \
+    #                                      " in 3 times".format(str(datetime.datetime.now())[:10])
 
 
 # ---------------------------
