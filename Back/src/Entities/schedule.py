@@ -97,20 +97,22 @@ class Day(Base):
 
     def __repr__(self):
         # ATTENTION A CORRIGER : REPR de task a priori pas possible (taille str trop grande.
-        # Risque de devenir du front, mais tests nécessaires
-        for task in [self.five_minute_slots[0]] + [self.five_minute_slots[i]
-                                                   for i in range(1, len(self.five_minute_slots))
-                                                   if (self.five_minute_slots[i] !=
-                                                       self.five_minute_slots[i - 1])]:
+        # Risque de devenir du front, mais tests nï¿½cessaires
+        # for task in [self.five_minute_slots[0]] + [self.five_minute_slots[i]
+        #                                            for i in range(1, len(self.five_minute_slots))
+        #                                            if (self.five_minute_slots[i] !=
+        #                                                self.five_minute_slots[i - 1])]:
+        #     task.__repr__()
+        for task in self.five_minute_slots:
             task.__repr__()
 
     def implement_task(self, task):
         """ adds the task to the day planning """
         # ATTENTION A CORRIGER : le format de beginning_date est une date, pas un entier.
         # Prendre simplement range(task.duration // 5 ) ??
-        # ATTENTION : générer l'heure de début avant le for.
+        # ATTENTION : gï¿½nï¿½rer l'heure de dï¿½but avant le for.
         # Tests NECESSAIRES
-        for i in range(task.beginning_date, task.beginning_date + task.duration):
+        for i in range(task.duration // 5):
             self.five_minute_slots[i] = task
 
 

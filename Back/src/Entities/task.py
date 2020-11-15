@@ -112,7 +112,7 @@ class MobileTask(Task):
     division = Column(Integer)
     task = relationship("Task", back_populates="mobile_task")
 
-    def __init__(self, task, deadline, attached, divisions):
+    def __init__(self, task, deadline, divisions):
         """
         We call the __init__ function of the class Task
         and we define the additional parameters
@@ -121,7 +121,6 @@ class MobileTask(Task):
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
-        #self.labels.append(attached)
         self.divisions = divisions
 
     def __repr__(self):
