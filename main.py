@@ -7,15 +7,14 @@ This is the main file for dev
 """
 
 import flask as f
-import json
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from Back.src.Algorithm.crypto import encrypt, compare
-from Back.src.Entities.user import User
-from Back.src.Entities.task import Task
-from Back.src.Entities.schemas import UserSchema
+from Back.src.algorithm.crypto import encrypt, compare
+from Back.src.entities.user import User
+from Back.src.entities.task import Task
+from Back.src.entities.schemas import UserSchema
 
 app = f.Flask(__name__, static_folder="Front/src/Static", template_folder="Front/src/Templates")
 CORS(app)
@@ -38,7 +37,8 @@ def log():
         user = session.query(User).filter(User.username == username).first()
         task_list = session.query(Task).filter(Task.user_id == User.id).all()
         session.close()
-        return f.render_template("navbar.html") + f.render_template("home.html", user=user, tasks=task_list)
+        return f.render_template("navbar.html") +\
+               f.render_template("home.html", user=user, tasks=task_list)
     return "You are not logged in <br><a href = '/login'></b>click here to log in</b>" \
            "</a><a href = '/register'></b>click here to sign in</b></a>"
 
@@ -61,11 +61,11 @@ def register():
                                          existent_username="Username "
                                                            + str(existent_username)
                                                            + " already taken")
-            else:
-                session.add(user_to_add)
-                session.commit()
-                session.close()
-                return f.redirect(f.url_for('log'))
+            # else:
+            #    session.add(user_to_add)
+            #    session.commit()
+            #    session.close()
+            #    return f.redirect(f.url_for('log'))
     return f.render_template("register.html", existent_username="")
 
 
@@ -81,9 +81,9 @@ def login():
         user_candidate_list = session.query(User).filter(User.username == username_form)
         for user in user_candidate_list:
             if compare(password_form, user.password):
-                print("---------------------------------------------------------------", logged_in_list)
+                print("---------------------", logged_in_list)
                 logged_in_list.append(username_form)
-                print("---------------------------------------------------------------", logged_in_list)
+                print("---------------------", logged_in_list)
                 session.close()
                 return f.jsonify(True)
     return f.jsonify(False)
@@ -97,14 +97,16 @@ def logout():
         username_form = user_form['username']
         empty_user = User("", "", "", "")
         new_empty_user = UserSchema().dump(empty_user)
-        print("---------------------------------------------------------------", logged_in_list)
+        print("---------------------", logged_in_list)
         logged_in_list.remove('{}'.format(username_form))
-        print("---------------------------------------------------------------", logged_in_list)
+        print("---------------------", logged_in_list)
         return f.jsonify(new_empty_user)
+    return 0
 
 
 @app.route('/users')
 def get_users():
+    """ Grabs all users in the database """
     # fetching from the database
     session = Session()
     user_objects = session.query(User).all()
@@ -120,6 +122,7 @@ def get_users():
 
 @app.route('/users', methods=['POST'])
 def add_user():
+    """ Adds an user to the database """
     # mount user object
     posted_user = UserSchema(only='username')\
         .load(f.request.get_json())

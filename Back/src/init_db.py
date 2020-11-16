@@ -5,13 +5,15 @@ This file sets up a database for the project
    ENPC - (c)
 
 """
+# pylint: disable=E0401
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from Algorithm.crypto import encrypt
-from Entities.user import User
-from Entities.task import Base, Task
-from Entities.schedule import Schedule, Week, Day
+from entities.user import User
+from entities.task import Base, Task
+from algorithm.crypto import encrypt
+# from entities.schedule import Schedule, Week, Day
 
 # pylint: disable=E1101
 

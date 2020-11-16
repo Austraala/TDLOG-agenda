@@ -10,7 +10,7 @@ import datetime
 
 from .task import Task, FixedTask, MobileTask
 from .schedule import Day, Week, Schedule
-# from ..Algorithm.optimize import
+# from ..algorithm.optimize import
 
 # Defines tested variables
 # Name, duration, difficulty

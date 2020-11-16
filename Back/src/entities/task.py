@@ -5,7 +5,7 @@ This file defines the class Task for our planning system
    ENPC - (c)
 
 """
-# pylint: disable=E1101
+# pylint: disable=E1101, E0401
 
 # Imports
 import datetime
