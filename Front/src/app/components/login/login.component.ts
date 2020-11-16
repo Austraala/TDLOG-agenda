@@ -1,36 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { UserApiService } from '../../Service/user_api.service';
 import { API_URL } from '../../env';
+import { Router } from '@angular/router';
 
 import { User, Task, Schedule } from '../../Models/classes.model';
 
 @Component({
-  selector: 'login',
+  selector: 'app-log-in',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-  user: User = new User("","","","");
-  loggedUserSubs: Subscription = new Subscription();
-  loggedUser: User = new User("","","","");
-  constructor(private usersApi: UserApiService) {}
+export class LoginComponent implements OnInit, OnDestroy {
+  user: User = new User('', '', '', '');
+  loginValidSubs: Subscription = new Subscription();
+  loginValid = false;
+  constructor(private usersApi: UserApiService, private router: Router) {
+  }
 
-  ngOnInit() {
-      this.user = new User("Archlinux", "Bull", "M", "a@com");
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.loginValidSubs.unsubscribe();
+  }
+
+  login(): void {
+    console.log('Attempting to connect');
+    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(res => { this.loginValid = res; }, console.error);
+    if (this.loginValid === true) {
+      console.log(this.user.username);
+      localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
+      this.router.navigate(['/home']);
     }
-
-  ngOnDestroy() {
-    this.loggedUserSubs.unsubscribe();
-  }
-
-  logIn({value}: {value: User}){
-      this.user = value;
-      this.loggedUserSubs = this.usersApi.logBack(`${API_URL}/login_back`, this.user).subscribe(res => {this.loggedUser = res; }, console.error);
-  }
-
-  logOut(user : User){
-      this.user = user;
-      this.loggedUserSubs = this.usersApi.logBack(`${API_URL}/logout_back`, this.user).subscribe(res => {this.loggedUser = res; }, console.error);
   }
 }

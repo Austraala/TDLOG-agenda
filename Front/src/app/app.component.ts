@@ -15,24 +15,24 @@ export class AppComponent implements OnInit, OnDestroy {
   usersListSubs: Subscription = new Subscription();
   usersList: User[] = [];
   loggedUserSubs: Subscription = new Subscription();
-  loggedUser: User = new User("", "", "", "");
+  loggedUser: User = new User('', '', '', '');
 
   constructor(private usersApi: UserApiService, private router: Router, private route: ActivatedRoute) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.usersListSubs = this.usersApi.getUsers(`${API_URL}/users`).subscribe(res => { this.usersList = res; }, console.error);
     this.route.queryParams.subscribe(params => {
       this.loggedUser = params.loggedUser;
     });
-    if (this.loggedUser = new User("", "", "", "")) {
+    if (this.loggedUser === new User('', '', '', '')) {
       this.router.navigate(['/login']);
     } else {
 
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.usersListSubs.unsubscribe();
   }
 }

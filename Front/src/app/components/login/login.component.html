@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-4">
-    <form class="form-horizontal" #loginForm="ngForm" (ngSubmit)="logIn(loginForm)">
+    <form class="form-horizontal" #loginForm="ngForm" (ngSubmit)="login()">
       <div class="form-group">
         <label for="inputUsername">Username</label>
         <input type="text" [(ngModel)]="user.username" id="inputUsername" name="username" placeholder="Username"
@@ -15,9 +15,5 @@
         <button class="btn btn-primary pull-right" [disabled]="!loginForm.form.valid">Connexion</button>
       </div>
     </form>
-  </div>
-  {{loggedUser.username}}
-   <div *ngIf="loggedUser.username != ''">
-    <a (click)="logOut(loggedUser)">Log out</a>
   </div>
 </div>

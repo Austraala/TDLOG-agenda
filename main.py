@@ -85,11 +85,8 @@ def login():
                 logged_in_list.append(username_form)
                 print("---------------------------------------------------------------", logged_in_list)
                 session.close()
-                new_user = UserSchema().dump(user)
-                return f.jsonify(new_user)
-    empty_user = User("", "", "", "")
-    new_empty_user = UserSchema().dump(empty_user)
-    return f.jsonify(new_empty_user)
+                return f.jsonify(True)
+    return f.jsonify(False)
 
 
 @app.route('/logout_back', methods=['POST', 'GET'])

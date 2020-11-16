@@ -12,7 +12,7 @@ export class UserApiService {
   constructor(private http: HttpClient) {
   }
 
-  private static _handleError(err: HttpErrorResponse | any) {
+  private static _handleError(err: HttpErrorResponse | any): Observable<never> {
     return throwError(err.message || 'Error: Unable to complete request.');
   }
 
@@ -22,7 +22,7 @@ export class UserApiService {
   }
 
   // Call login / logout route in flask
-  public logBack(url: string, user: User): Observable<User> {
-    return this.http.post<User>(url, user).catch(UserApiService._handleError);
+  public loginCheck(url: string, user: User): Observable<boolean> {
+    return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
     }
 }
