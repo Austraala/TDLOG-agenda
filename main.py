@@ -7,6 +7,7 @@ This is the main file for dev
 """
 
 import flask as f
+import json
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -68,29 +69,41 @@ def register():
     return f.render_template("register.html", existent_username="")
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login_back', methods=['POST', 'GET'])
 def login():
-    """ If the connection information fits database, create a session"""
+    """ If the connection information fits database, adds user to logged in list"""
 
     if f.request.method == 'POST':
-        username_form = f.request.form['username']
-        password_form = f.request.form['password'].encode('utf-8')
+        user_form = f.request.json
+        username_form = user_form['username']
+        password_form = user_form['password'].encode('utf-8')
         session = Session()
         user_candidate_list = session.query(User).filter(User.username == username_form)
         for user in user_candidate_list:
             if compare(password_form, user.password):
+                print("---------------------------------------------------------------", logged_in_list)
                 logged_in_list.append(username_form)
+                print("---------------------------------------------------------------", logged_in_list)
                 session.close()
-                return f.redirect(f.url_for('log'))
-    return f.render_template("login.html")
+                new_user = UserSchema().dump(user)
+                return f.jsonify(new_user)
+    empty_user = User("", "", "", "")
+    new_empty_user = UserSchema().dump(empty_user)
+    return f.jsonify(new_empty_user)
 
 
-@app.route('/logout/<username>')
-def logout(username):
+@app.route('/logout_back', methods=['POST', 'GET'])
+def logout():
     """ Remove the username from the session if it is there """
-    print(logged_in_list, '{}'.format(username))
-    logged_in_list.remove('{}'.format(username))
-    return f.redirect(f.url_for('log'))
+    if f.request.method == 'POST':
+        user_form = f.request.json
+        username_form = user_form['username']
+        empty_user = User("", "", "", "")
+        new_empty_user = UserSchema().dump(empty_user)
+        print("---------------------------------------------------------------", logged_in_list)
+        logged_in_list.remove('{}'.format(username_form))
+        print("---------------------------------------------------------------", logged_in_list)
+        return f.jsonify(new_empty_user)
 
 
 @app.route('/users')
@@ -109,22 +122,22 @@ def get_users():
 
 
 @app.route('/users', methods=['POST'])
-def add_exam():
-    # mount exam object
+def add_user():
+    # mount user object
     posted_user = UserSchema(only='username')\
         .load(f.request.get_json())
 
     user = User(**posted_user.data, created_by="HTTP post request")
 
-    # persist exam
+    # persist user
     session = Session()
     session.add(user)
     session.commit()
 
-    # return created exam
-    new_exam = UserSchema().dump(user).data
+    # return created user
+    new_user = UserSchema().dump(user).data
     session.close()
-    return f.jsonify(new_exam), 201
+    return f.jsonify(new_user), 201
 
 
 if __name__ == '__main__':

@@ -1,9 +1,18 @@
-<div style="text-align:center">
-  <h1>Users</h1>
-</div>
-<h2>Here are the users created so far: </h2>
-<ul>
-  <li *ngFor="let user of usersList">
-    {{user.username}}
-  </li>
-</ul>
+<body>
+  <div style="text-align:center">
+    <h1>Users</h1>
+  </div>
+  <h2>Here are the users created so far: </h2>
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <ul>
+        <li *ngFor="let user of usersList">
+          {{user.username}}
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</body>

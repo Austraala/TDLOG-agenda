@@ -1,8 +1,9 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
-import {UserApiService} from './Service/user_api.service';
-import {User} from './Models/user.model';
-import {API_URL} from './env';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { UserApiService } from './Service/user_api.service';
+import { User } from './Models/classes.model';
+import { API_URL } from './env';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,12 +14,22 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
   usersListSubs: Subscription = new Subscription();
   usersList: User[] = [];
+  loggedUserSubs: Subscription = new Subscription();
+  loggedUser: User = new User("", "", "", "");
 
-  constructor(private usersApi: UserApiService) {
+  constructor(private usersApi: UserApiService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.usersListSubs = this.usersApi.getUsers(`${API_URL}/users`).subscribe(res => {this.usersList = res; }, console.error);
+    this.usersListSubs = this.usersApi.getUsers(`${API_URL}/users`).subscribe(res => { this.usersList = res; }, console.error);
+    this.route.queryParams.subscribe(params => {
+      this.loggedUser = params.loggedUser;
+    });
+    if (this.loggedUser = new User("", "", "", "")) {
+      this.router.navigate(['/login']);
+    } else {
+
+    }
   }
 
   ngOnDestroy() {
