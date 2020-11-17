@@ -7,8 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { UserApiService } from './Service/user_api.service';
 import { HomeComponent } from './components/home/home.component';
+import { UserApiService } from './Service/user_api.service';
+import { AuthGuard } from './service/auth/auth.guard';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { HomeComponent } from './components/home/home.component';
     FormsModule,
     AppRoutingModule
   ],
-  providers: [UserApiService],
+  providers: [UserApiService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {

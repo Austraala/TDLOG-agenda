@@ -25,13 +25,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginValidSubs.unsubscribe();
   }
 
-  login(): void {
+
+  wait() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve("I promise to return after one second!");
+      }, 6000);
+    });
+  }
+
+
+  async login(): Promise<void> {
     console.log('Attempting to connect');
-    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(res => { this.loginValid = res; }, console.error);
+    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(async res => { this.loginValid = await res; }, console.error);
+    const value = await this.wait()
     if (this.loginValid === true) {
-      console.log(this.user.username);
       localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
       this.router.navigate(['/home']);
     }
-  }
+    }
 }
