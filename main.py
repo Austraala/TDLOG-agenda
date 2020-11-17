@@ -17,6 +17,7 @@ from Back.src.entities.task import Task
 from Back.src.entities.schemas import UserSchema
 
 app = f.Flask(__name__, static_folder="Front/src/Static", template_folder="Front/src/Templates")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dbdir/test'
 CORS(app)
 
 # Sets things up for sqlalchemy

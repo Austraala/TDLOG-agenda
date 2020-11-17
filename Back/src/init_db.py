@@ -10,17 +10,17 @@ This file sets up a database for the project
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from Entities.user import User
-from Entities.task import Base, Task, FixedTask, MobileTask
-from Algorithm.crypto import encrypt
+from entities.user import User
+from entities.task import Base, Task, FixedTask, MobileTask
+from algorithm.crypto import encrypt
 # from entities.schedule import Schedule, Week, Day
 
 # pylint: disable=E1101
 
 # Sets things up for sqlalchemy
-# engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
+engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
 # if the file is not found, use the absolute path to database.db :
-engine = create_engine("sqlite+pysqlite://///Users/aaronfargeon/Desktop/2A/TDLOG/PROJET_TDLOG/Back/src/database.db", echo=True)
+# engine = create_engine("sqlite+pysqlite://///Users/aaronfargeon/Desktop/2A/TDLOG/PROJET_TDLOG/Back/src/database.db", echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
