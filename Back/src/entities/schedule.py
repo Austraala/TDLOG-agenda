@@ -57,8 +57,8 @@ class Week(Base):
     schedule_id = Column(Integer, ForeignKey('schedules.id'))
     schedule = relationship("Schedule", back_populates="weeks")
 
-    def __init__(self):
-        self.days = [] * 7
+    def __init__(self, length):
+        self.days = [] * length
 
     def __eq__(self, other):
         return self.days == other.days
@@ -114,7 +114,7 @@ class Day(Base):
         # Prendre simplement range(task.duration // 5 ) ??
         # ATTENTION : g�n�rer l'heure de d�but avant le for.
         # Tests NECESSAIRES
-        self.five_minute_slots[position] = task
+        self.content[position] = task
 
 
 Week.days = relationship("Day", back_populates="week")
