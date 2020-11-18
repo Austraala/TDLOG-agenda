@@ -8,7 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { UserApiService } from './Service/user_api.service';
+import { RegisterComponent } from './components/register/register.component';
+import { UserApiService } from './service/user_api.service';
 import { AuthGuard } from './service/auth/auth.guard';
 
 
@@ -16,7 +17,8 @@ import { AuthGuard } from './service/auth/auth.guard';
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

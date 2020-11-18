@@ -6,3 +6,7 @@ Cookies + Personal Statistics \
 Finished task + get ahead \
 Anki features \
 Mail inscription
+
+# Questions
+Nom components ? Que mettre où ?\
+Login wait ?\

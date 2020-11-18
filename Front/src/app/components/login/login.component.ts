@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { UserApiService } from '../../Service/user_api.service';
-import { API_URL } from '../../env';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { UserApiService } from '../../service/user_api.service';
+import { API_URL } from '../../env';
 
-import { User, Task, Schedule } from '../../Models/classes.model';
+import { User, Task, Schedule } from '../../models/classes.model';
 
 @Component({
   selector: 'app-log-in',
@@ -13,7 +13,6 @@ import { User, Task, Schedule } from '../../Models/classes.model';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   user: User = new User('', '', '', '');
-  loginValidSubs: Subscription = new Subscription();
   loginValid = false;
   constructor(private usersApi: UserApiService, private router: Router) {
   }
@@ -22,14 +21,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.loginValidSubs.unsubscribe();
   }
 
 
-  wait() {
+  wait(): Promise<any> {
     return new Promise(resolve => {
       setTimeout(() => {
-        resolve("I promise to return after one second!");
+        resolve('I promise to return after one second!');
       }, 6000);
     });
   }
@@ -37,8 +35,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async login(): Promise<void> {
     console.log('Attempting to connect');
-    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(async res => { this.loginValid = await res; }, console.error);
-    const value = await this.wait()
+    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe( res => { this.loginValid = res; }, console.error);
+    const value = await this.wait();
     if (this.loginValid === true) {
       localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
       this.router.navigate(['/home']);

@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import {User} from '../Models/classes.model';
+import { User } from '../models/classes.model';
 
 @Injectable()
 export class UserApiService {
@@ -25,4 +25,8 @@ export class UserApiService {
   public loginCheck(url: string, user: User): Observable<boolean> {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
     }
+
+  public registerCheck(url: string, user: User): Promise<any> {
+    return this.http.post<boolean>(url, user).toPromise();
+  }
 }
