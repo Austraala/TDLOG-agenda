@@ -57,8 +57,8 @@ class Week(Base):
     schedule_id = Column(Integer, ForeignKey('schedules.id'))
     schedule = relationship("Schedule", back_populates="weeks")
 
-    def __init__(self):
-        self.days = [] * 7
+    def __init__(self, length):
+        self.days = [] * length
 
     def __eq__(self, other):
         return self.days == other.days
@@ -87,13 +87,15 @@ class Day(Base):
     fixed_task = relationship("FixedTask", back_populates="day")
 
     def __init__(self):
-        self.five_minute_slots = [] * 288
+        #self.five_minute_slots = [] * 288
+        self.content = []
 
     def __eq__(self, other):
-        return self.five_minute_slots == other.five_minute_slots
+        #return self.five_minute_slots == other.five_minute_slots
+        return self.content == other.content
 
     def __str__(self):
-        print(self.five_minute_slots)
+        print(self.content)
 
     def __repr__(self):
         # ATTENTION A CORRIGER : REPR de task a priori pas possible (taille str trop grande.
@@ -103,17 +105,16 @@ class Day(Base):
         #                                            if (self.five_minute_slots[i] !=
         #                                                self.five_minute_slots[i - 1])]:
         #     task.__repr__()
-        for task in self.five_minute_slots:
+        for task in self.content:
             task.__repr__()
 
-    def implement_task(self, task):
+    def implement_task(self, task, position):
         """ adds the task to the day planning """
         # ATTENTION A CORRIGER : le format de beginning_date est une date, pas un entier.
         # Prendre simplement range(task.duration // 5 ) ??
         # ATTENTION : g�n�rer l'heure de d�but avant le for.
         # Tests NECESSAIRES
-        for i in range(task.duration // 5):
-            self.five_minute_slots[i] = task
+        self.content[position] = task
 
 
 Week.days = relationship("Day", back_populates="week")
