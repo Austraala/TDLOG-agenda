@@ -12,7 +12,7 @@ import bcrypt
 
 def encrypt(password):
     """ Hashes the password to store it in the database """
-    salt = bcrypt.gensalt(rounds=16)
+    salt = bcrypt.gensalt(rounds=4)
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password
 

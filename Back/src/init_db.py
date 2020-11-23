@@ -41,7 +41,7 @@ session.commit()
 task_dummy = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                   .first()[0], 'Math', 80, 10)
 task_dummy_2 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
-                  .first()[0], 'English', 60, 4)
+                    .first()[0], 'English', 60, 4)
 user_dummy.tasks = [task_dummy, task_dummy_2]
 # Add it to the database
 session.add(task_dummy, task_dummy_2)
@@ -50,20 +50,20 @@ session.commit()
 
 # fixed and mobile task dummies
 task_dummy_3 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
-                  .first()[0], 'Mechanics', 90, 9)
+                    .first()[0], 'Mechanics', 90, 9)
 fixed_task_dummy_1 = FixedTask(task_dummy_3, '16/04/2000', False)
 task_dummy_4 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
-                  .first()[0], 'Stat. Phy.', 45, 6)
+                    .first()[0], 'Stat. Phy.', 45, 6)
 fixed_task_dummy_2 = FixedTask(task_dummy_4, '16/04/2000', True)
 user_dummy.tasks += [fixed_task_dummy_1, fixed_task_dummy_2]
 session.add(fixed_task_dummy_1, fixed_task_dummy_2)
 session.commit()
 
 task_dummy_5 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
-                  .first()[0], 'Programming', 120, 7)
+                    .first()[0], 'Programming', 120, 7)
 mobile_task_dummy_1 = MobileTask(task_dummy_5, 'December 10th', 3)
 task_dummy_6 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
-                  .first()[0], 'Spanish', 50, 8)
+                    .first()[0], 'Spanish', 50, 8)
 mobile_task_dummy_2 = MobileTask(task_dummy_6, 'January 13th', 1)
 user_dummy.tasks += [mobile_task_dummy_1, mobile_task_dummy_2]
 session.add(mobile_task_dummy_1, mobile_task_dummy_2)
@@ -73,3 +73,5 @@ session.close()
 
 print(session.query(User).all())
 print(session.query(Task).all())
+print(session.query(FixedTask).all())
+print(session.query(MobileTask).all())

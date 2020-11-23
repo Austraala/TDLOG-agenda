@@ -8,7 +8,6 @@ This file defines the class Task for our planning system
 # pylint: disable=E1101, E0401
 
 # Imports
-import datetime
 from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from .user import Base, User
@@ -85,8 +84,6 @@ class FixedTask(Task):
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.beginning_date = beginning_date
         self.recurring = recurring
-        #if recurring:
-        #    self.assign_label("recurring")
 
     def __repr__(self):
         """
@@ -127,7 +124,6 @@ class MobileTask(Task):
         """
 
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
-        #self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
         self.divisions = divisions
 
@@ -139,8 +135,6 @@ class MobileTask(Task):
         to do before deadline, in divisions times
         """
 
-        # return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date)[:10] \
-        #        + ", to do before " + str(self.deadline) + ", in " + str(self.divisions) + " times"
         return "Mobile" + super().__repr__() + ", to do before " + str(self.deadline) \
                + ", in " + str(self.divisions) + " times"
 

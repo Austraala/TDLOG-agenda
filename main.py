@@ -11,17 +11,18 @@ from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+import time
 from Back.src.algorithm.crypto import encrypt, compare
 from Back.src.entities.user import User
 from Back.src.entities.task import Task
 from Back.src.entities.schemas import UserSchema
 
-app = f.Flask(__name__, static_folder="Front/src/Static", template_folder="Front/src/Templates")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dbdir/test'
+app = f.Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:///database.db'
 CORS(app)
 
 # Sets things up for sqlalchemy
-engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
+engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
@@ -51,7 +52,6 @@ def login():
 @app.route('/logout_back', methods=['POST', 'GET'])
 def logout():
     """ Remove the username from the session if it is there """
-    print("--------------------- CALLED")
     if f.request.method == 'POST':
         user_form = f.request.json
         username_form = user_form['username']
