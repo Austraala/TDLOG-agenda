@@ -115,7 +115,7 @@ class MobileTask(Task):
 
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
     deadline = Column(Integer)
-    division = Column(Integer)
+    divisions = Column(Integer)
     task = relationship("Task", back_populates="mobile_task")
 
     __mapper_args__ = dict(polymorphic_identity='mobile_tasks')
