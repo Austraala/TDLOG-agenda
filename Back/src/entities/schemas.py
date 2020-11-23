@@ -46,7 +46,7 @@ class MobileTaskSchema(Schema):
     """ Marshmallow class to allow json manipulation of fixed task"""
     id = fields.Number()
     deadline = fields.Number()
-    division = fields.Number()
+    divisions = fields.Number()
     task = fields.Nested(TaskSchema)
 
 

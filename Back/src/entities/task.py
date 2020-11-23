@@ -27,6 +27,9 @@ class Task(Base):
     name = Column(String, unique=True)
     duration = Column(Integer)
     difficulty = Column(Integer)
+    type = Column(String(50))
+
+    __mapper_args__ = dict(polymorphic_identity='tasks', polymorphic_on=type)
 
     def __init__(self, user_id, name, duration, difficulty):
         """ We get the duration, name, difficulty and labels from the user """
@@ -71,6 +74,8 @@ class FixedTask(Task):
     recurring = Column(Boolean)
     task = relationship("Task", back_populates="fixed_task")
 
+    __mapper_args__ = dict(polymorphic_identity='fixed_tasks')
+
     def __init__(self, task, beginning_date, recurring):
         """
         We call the __init__ function of the class Task
@@ -79,8 +84,9 @@ class FixedTask(Task):
 
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.beginning_date = beginning_date
-        if recurring:
-            self.assign_label("recurring")
+        self.recurring = recurring
+        #if recurring:
+        #    self.assign_label("recurring")
 
     def __repr__(self):
         """
@@ -112,6 +118,8 @@ class MobileTask(Task):
     division = Column(Integer)
     task = relationship("Task", back_populates="mobile_task")
 
+    __mapper_args__ = dict(polymorphic_identity='mobile_tasks')
+
     def __init__(self, task, deadline, divisions):
         """
         We call the __init__ function of the class Task
@@ -119,7 +127,7 @@ class MobileTask(Task):
         """
 
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
-        self.assignment_date = datetime.datetime.now()
+        #self.assignment_date = datetime.datetime.now()
         self.deadline = deadline
         self.divisions = divisions
 
@@ -131,8 +139,10 @@ class MobileTask(Task):
         to do before deadline, in divisions times
         """
 
-        return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date)[:10] \
-               + ", to do before " + str(self.deadline) + ", in " + str(self.divisions) + " times"
+        # return "Mobile" + super().__repr__() + " assigned on " + str(self.assignment_date)[:10] \
+        #        + ", to do before " + str(self.deadline) + ", in " + str(self.divisions) + " times"
+        return "Mobile" + super().__repr__() + ", to do before " + str(self.deadline) \
+               + ", in " + str(self.divisions) + " times"
 
     def __eq__(self, other):
         """ Returns True if everything besides
