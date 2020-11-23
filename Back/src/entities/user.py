@@ -8,7 +8,7 @@ This file defines the class User for our planning system
 # pylint: disable=E1101
 
 # Imports
-import mapped as mapped
+# import mapped as mapped
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 

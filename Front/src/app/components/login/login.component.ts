@@ -35,11 +35,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async login(): Promise<void> {
     console.log('Attempting to connect');
-    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe( res => { this.loginValid = res; }, console.error);
+    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(res => { this.loginValid = res; }, console.error);
     const value = await this.wait();
     if (this.loginValid === true) {
       localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
       this.router.navigate(['/home']);
     }
-    }
+  }
 }

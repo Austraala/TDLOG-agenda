@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
   logout(): void {
     console.log('Attempting to disconnect');
     this.username = this.getLogin();
-    this.usersApi.loginCheck(`${API_URL}/logout_back`, new User(this.username, '', '', '')).subscribe( res => { this.logoutValid = res; }, console.error);
+    this.usersApi.loginCheck(`${API_URL}/logout_back`, new User(this.username, '', '', ''))
+      .subscribe(res => { this.logoutValid = res; }, console.error);
     localStorage.removeItem('username');
     this.router.navigate(['/login']);
   }

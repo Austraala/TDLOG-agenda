@@ -10,8 +10,8 @@ import { API_URL } from '../../env';
 })
 export class RegisterComponent {
   genders = ['M', 'F',
-            'Alligator', 'Archlinux User'];
-  
+    'Alligator', 'Archlinux User'];
+
   user: User = new User('', '', '', '');
   constructor(private usersApi: UserApiService) { }
 
