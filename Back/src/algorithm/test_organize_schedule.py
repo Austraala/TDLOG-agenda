@@ -2,6 +2,7 @@
 This is a pytest file. To run with pytest
 
    Aaron Fargeon
+   Benjamin Roulin
    ENPC - (c)
 
 """
