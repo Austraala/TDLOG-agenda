@@ -7,7 +7,8 @@ This file defines the process through which we assign a starting date to each ta
 """
 
 # Imports
-import task.py
+from entities.task import Task, FixedTask, MobileTask
+from entities.schedule import Schedule, Week, Day
 
 
 #    PART A - NAIVE OPTIMIZATION
