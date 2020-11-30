@@ -45,9 +45,9 @@ from entities.schedule import Schedule, Week, Day
 
 #   0.  Must create a Constraint Class (it's goint to be easier this way).
 
-class Constraint :
+class Constraint:
 
-    def __init__(self):
+    def __init__(self, name, week, day, starting_time, duration, deadline):
         self.name = name
         #   string
         self.week = week

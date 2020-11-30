@@ -8,8 +8,8 @@ This is a pytest file. To run with pytest
 """
 # pylint: disable=E0401
 
-from algorithm.crypto import encrypt, compare
-from algorithm.optimize import merge_time_constraints, \
+from .crypto import encrypt, compare
+from .organize_schedule import merge_time_constraints, \
     test_simultaneity  # , smooth_time_constraints, register_constraint
 
 PASSWORD_TEST = "password_test"
