@@ -21,5 +21,4 @@ def compare(password, encrypted_password):
     """
     Check if the encrypted password is a possible hash from an original password
     """
-
     return bcrypt.checkpw(password, encrypted_password)
