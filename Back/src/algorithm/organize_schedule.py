@@ -7,7 +7,7 @@ This file defines the process through which we assign a starting date to each ta
 """
 
 # Imports
-from entities.task import Task, FixedTask, MobileTask
+from Back.src.entities.task import Task, FixedTask, MobileTask
 from entities.schedule import Schedule, Week, Day
 
 
@@ -43,11 +43,11 @@ from entities.schedule import Schedule, Week, Day
 #       How I handle time, it's now a minute thing (1440 in a day).
 #
 
-#   0.  Must create a Constraint Class (it's goint to be easier this way).
+#   0.  Must create a Constraint Class (it's going to be easier this way).
 
 class Constraint:
 
-    def __init__(self, name, week, day, starting_time, duration, deadline):
+    def __init__(self, name, week, day, starting_time, duration, deadline, mobile, implemented):
         self.name = name
         #   string
         self.week = week
@@ -62,16 +62,10 @@ class Constraint:
         #   a [week, day, time] list, with time in minutes
 
         #   This one is a bool (False if fixed, True if Mobile)
-        self.mobile = False
+        self.mobile = mobile
 
         #   This one is a bool (False if still to be implemented, True otherwise)
-        self.implemented = False
-
-    def __eq__(self, other):
-        return self.task == other.task
-
-    def __ne__(self, other):
-        return self.task != other.task
+        self.implemented = implemented
 
     def __lt__(self, other):
         if self.week < other.week:
@@ -80,7 +74,7 @@ class Constraint:
             return True
         elif self.starting_time < other.starting_time:
             return True
-        else :
+        else:
             return False
 
     def __gt__(self, other):
@@ -97,7 +91,7 @@ def time_to_hour_and_minute(time):
     Input is an amount of minute (time in a day).
     Output is a tuple [hour, minute].
     """
-    return [minute // 60, minute % 60]
+    return [time // 60, time % 60]
 
 
 def minute_and_hour_to_time(minute, hour):
@@ -124,15 +118,17 @@ def get_constraints(list_tasks_to_implement):
     for constraint in list_tasks_to_implement:
         mobile = type(constraint).__name__ != FixedTask
         #   False if FixedTas, True otherwise
-        new_constraint = Constraint()
+        new_constraint = Constraint(constraint.name, False, False, False,
+                                    constraint.duration, False, constraint.mobile,
+                                    False)
         new_constraint.name = constraint.name
-        new_constraint.week =False
+        new_constraint.week = False
         new_constraint.day = False,
         constraint.duration = constraint.duration
         new_constraint.mobile = mobile
         if mobile:
             new_constraint.deadline = constraint.deadline
-        else :
+        else:
             #   That means, if the constraint is fixed
             new_constraint.week = constraint.week
             new_constraint.day = constraint.day
@@ -172,8 +168,6 @@ def merge_time_constraints(list_constraints, constraint_one, constraint_two):
     Both time constraints must be demonstrably simultaneous before !!
     """
 
-    week = constraint_one.week
-    day = constraint_one.day
     list_constraints.remove(constraint_one)
     list_constraints.remove(constraint_two)
 
@@ -181,13 +175,15 @@ def merge_time_constraints(list_constraints, constraint_one, constraint_two):
     ending_time2 = constraint_two.starting_time + constraint_two.duration
 
     new_name = constraint_one.name + " and " + constraint_two.name
+    starting_time = min(constraint_one.starting_time, constraint_two.starting_time)
+    duration = max(ending_time1, ending_time2) - starting_time
 
-    new_constraint = Constraint()
-    new_constraint.name = new_name
-    new_constraint.day = constraint_one.day
-    new_constraint.week = constraint_one.week
-    new_constraint.starting_time = min(constraint_one.starting_time, constraint_two.starting_time)
-    new_constraint.duration = max(ending_time1, ending_time2) - new_constraint.starting_time
+    new_constraint = Constraint(new_name, constraint_one.week, constraint_one.day,
+                                #   Starting time
+                                starting_time,
+                                #   Ending time
+                                duration,
+                                False, False, False)
 
     list_constraints.append(new_constraint)
 
@@ -215,7 +211,7 @@ def compare_time_constraints(constraint_one, constraint_two):
 
     It also puts any Mobile Task after any Fixed Task.
     """
-    #   Make it a Booléen plis - I should indeed.
+    #   Make it a bool pls - I should indeed.
 
     #   Check if one is a fixed one and the other one isn't :
     if constraint_one.mobile != constraint_two.mobile:
@@ -224,7 +220,7 @@ def compare_time_constraints(constraint_one, constraint_two):
             return -1
 
     #   Check if both are fixed :
-    if constraint_one.mobile == False and constraint_two.mobile == False:
+    if not constraint_one.mobile and not constraint_two.mobile:
 
         if constraint_one.week < constraint_two.week:
             return -1
@@ -268,7 +264,7 @@ def check_timeslot(end_previous_task, start_next_task, duration):
     This function returns True if there is a big enough slot for the duration of the task to fit. Otherwise, it returns
         False.
     """
-    if start_next_task - end_previous_task > duration :
+    if start_next_task - end_previous_task > duration:
         return True
     return False
 
@@ -292,7 +288,7 @@ def find_time_today(mobile_task, list_constraints, day, week):
     constraints_of_that_day = sort_time_constraints(constraints_of_that_day)
 
     #   Check if there's time before the first task
-    if constraints_of_that_day[0].starting_time > 0 :
+    if constraints_of_that_day[0].starting_time > 0:
         if check_timeslot(0, constraints_of_that_day[0].starting_time, duration):
 
             mobile_task.week = week
@@ -337,7 +333,7 @@ def find_time_today(mobile_task, list_constraints, day, week):
 #   VI - Schedule from list of constraints and constraints from list os schedules
 
 
-def get_schedule(list_constraints):
+def get_schedule_from_constraints(list_constraints):
     """
     A schedule is a list of weeks, with days inside, with tasks that are a list of :
         [name, starting_time, mobile, duration, deadline]
@@ -346,7 +342,7 @@ def get_schedule(list_constraints):
         duration is in minutes
     """
     #   It goes up to a year after. It creates 52 weeks of 7 days.
-    schedule = [[[] for i in range(6)] for i in range(51)]
+    schedule = [[[] for _ in range(6)] for _ in range(51)]
     for constraint in list_constraints:
         schedule[constraint.week][constraint.day].append([constraint.name, constraint.starting_time,
                                                           constraint.mobile, constraint.duration,
@@ -354,13 +350,13 @@ def get_schedule(list_constraints):
     return schedule
 
 
-def get_constraints(schedule, reshuffle):
+def get_constraints_from_schedule(schedule, reshuffle):
     """
     A schedule is a list of weeks with days with tasks.
     We'll go through each task, creating a constraint with them.
         A task is [name, starting_time, mobile, duration, deadline]
 
-    reshuffle is a bool :
+    Reshuffle is a bool :
         False if you don't need to reshuffle, so it will give you mobile constraints with day and week, and the
             bool implemented at True.
         True if you're going to reshuffle and add more tasks, so it will give you unimplemented mobile constraints
@@ -372,15 +368,14 @@ def get_constraints(schedule, reshuffle):
     for week in schedule:
         for day in week:
             for task_to_constraint in day:
-                new_constraint = Constraint()
-                new_constraint.duration = task_to_constraint[3]
-                new_constraint.deadline = task_to_constraint[4]
-                new_constraint.mobile = task_to_constraint[2]
+                new_constraint = Constraint(task_to_constraint[0], False, False, task_to_constraint[1],
+                                            task_to_constraint[3], task_to_constraint[4], task_to_constraint[2],
+                                            False)
 
                 if task_to_constraint[2] and reshuffle:
                     #   The task is mobile and we're going to reshuffle.
                     new_constraint.implemented = False
-                else :
+                else:
                     new_constraint.implemented = True
                     new_constraint.day = day
                     new_constraint.week = week
@@ -412,12 +407,12 @@ def organize_schedule(list_tasks, current_week, current_day):
         day += 1
 
     list_constraints = sort_time_constraints(get_constraints(list_tasks))
-    for constraint in list_constraints :
+    for constraint in list_constraints:
         check_day = day
         check_week = week
         if constraint.mobile and not constraint.implemented:
             #   only if the constraint is mobile and not implemented
-            while not find_time_today(constraint):
+            while not find_time_today(constraint, list_constraints, check_week, check_day):
                 #   It doesn't go into the while if it fins immediately.
                 #   The function find_time_today already updates it.
                 if check_day == 6:
@@ -426,32 +421,7 @@ def organize_schedule(list_tasks, current_week, current_day):
                 else:
                     check_day += 1
 
-    return get_schedule(list_constraints)
-
-
-#   VIII    Get Data from Schedule
-
-def get_constraints_from_schedule(schedule) :
-    """
-    Gets the mobile-tasks back from the schedule.
-    Gets the rest of the tasks as constraints from the schedule.
-    Schedule is supposed to be a list of weeks. Each week is a list of day and each day is a list of tasks with
-        their time (in minutes since 00:00 the preceding day, so an int that goes from 0 to 1440.
-    It takes a schedule in input, and gives a list of tasks (list_tasks) with the mobile ones, and a list_constraints
-        with the fixed one ; so a tuple of lists.
-    """
-    list_constraints = []
-    list_tasks = []
-    for week in range(len(schedule)):
-        for day in range(len(week)):
-            for task in range(len(day)):
-                if type(task).__name__ == FixedTask :
-                    list_constraints.append([week, day, task.starting_time, task.starting_time + task.duration,
-                                             task.name, task])
-                elif type(task).__name__ == MobileTask :
-                    list_tasks.append(task)
-    return [list_tasks, list_constraints]
-
+    return get_schedule_from_constraints(list_constraints)
 
 
 #    PART B - OPTIMIZATION WITH SHUFFLE
