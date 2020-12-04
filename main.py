@@ -29,38 +29,35 @@ Session = scoped_session(session_factory)
 logged_in_list = []
 
 
-@app.route('/login_back', methods=['POST', 'GET'])
+@app.route('/login_back', methods=['POST'])
 def login():
     """ If the connection information fits database, adds user to logged in list"""
 
-    if f.request.method == 'POST':
-        user_form = f.request.json
-        username_form = user_form['username']
-        password_form = user_form['password'].encode('utf-8')
-        session = Session()
-        user_candidate_list = session.query(User).filter(User.username == username_form)
-        for user in user_candidate_list:
-            if compare(password_form, user.password):
-                print("---------------------", logged_in_list)
-                logged_in_list.append(username_form)
-                print("---------------------", logged_in_list)
-                session.close()
-                return f.jsonify(True)
+    user_form = f.request.json
+    username_form = user_form['username']
+    password_form = user_form['password'].encode('utf-8')
+    session = Session()
+    user_candidate_list = session.query(User).filter(User.username == username_form)
+    for user in user_candidate_list:
+        if compare(password_form, user.password):
+            print("---------------------", logged_in_list)
+            logged_in_list.append(username_form)
+            print("---------------------", logged_in_list)
+            session.close()
+            return f.jsonify(True)
     return f.jsonify(False)
 
 
-@app.route('/logout_back', methods=['POST', 'GET'])
+@app.route('/logout_back', methods=['POST'])
 def logout():
     """ Remove the username from the session if it is there """
-    if f.request.method == 'POST':
-        user_form = f.request.json
-        username_form = user_form['username']
-        print(username_form)
-        print("---------------------", logged_in_list)
-        logged_in_list.remove('{}'.format(username_form))
-        print("---------------------", logged_in_list)
-        return f.jsonify(True)
-    return f.jsonify(False)
+    user_form = f.request.json
+    username_form = user_form['username']
+    print(username_form)
+    print("---------------------", logged_in_list)
+    logged_in_list.remove('{}'.format(username_form))
+    print("---------------------", logged_in_list)
+    return f.jsonify(True)
 
 
 @app.route('/register', methods=['POST'])
@@ -78,17 +75,16 @@ def register():
     for existent_user in user_list:
         if existent_user.username == user.username:
             session.close()
-            return f.jsonify(False)
+            return f.jsonify(f.jsonify({"registered": False}), f.jsonify(existent_user))
 
     # persist user
-
     session.add(user)
     session.commit()
 
     # return created user
     new_user = UserSchema().dump(user)
     session.close()
-    return f.jsonify(new_user), 201
+    return f.jsonify(f.jsonify({"registered": False}), f.jsonify(new_user)), 201
 
 
 @app.route('/users')

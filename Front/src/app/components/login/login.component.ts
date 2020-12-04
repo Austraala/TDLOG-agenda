@@ -23,20 +23,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
-
-  wait(): Promise<any> {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve('I promise to return after one second!');
-      }, 6000);
-    });
-  }
-
-
   async login(): Promise<void> {
     console.log('Attempting to connect');
-    this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).subscribe(res => { this.loginValid = res; }, console.error);
-    const value = await this.wait();
+    await this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).toPromise().then(res => { this.loginValid = res; });
     if (this.loginValid === true) {
       localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
       this.router.navigate(['/home']);
