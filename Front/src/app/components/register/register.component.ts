@@ -18,7 +18,8 @@ export class RegisterComponent {
   constructor(private usersApi: UserApiService, private router: Router) { }
 
   async register(): Promise<void>  {
-    await this.usersApi.registerCheck(`${API_URL}/register`, this.user).toPromise().then(registered => { this.registerValid = registered });
+    await this.usersApi.registerCheck(`${API_URL}/register`, this.user).toPromise()
+    .then(registered => { this.registerValid = registered; });
     if (this.registerValid) {
       this.router.navigate(['/home']);
     }
