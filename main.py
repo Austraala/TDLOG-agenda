@@ -75,16 +75,15 @@ def register():
     for existent_user in user_list:
         if existent_user.username == user.username:
             session.close()
-            return f.jsonify(f.jsonify({"registered": False}), f.jsonify(existent_user))
+            return f.jsonify(False)
 
     # persist user
     session.add(user)
     session.commit()
 
     # return created user
-    new_user = UserSchema().dump(user)
     session.close()
-    return f.jsonify(f.jsonify({"registered": False}), f.jsonify(new_user)), 201
+    return f.jsonify(True), 201
 
 
 @app.route('/users')

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserApiService } from '../../service/user_api.service';
 import { User } from '../../models/classes.model';
 import { API_URL } from '../../env';
@@ -13,9 +14,13 @@ export class RegisterComponent {
     'Alligator', 'Archlinux User'];
 
   user: User = new User('', '', '', '');
-  constructor(private usersApi: UserApiService) { }
+  registerValid = true;
+  constructor(private usersApi: UserApiService, private router: Router) { }
 
-  register(): void {
-    this.usersApi.registerCheck(`${API_URL}/register`, this.user);
+  async register(): Promise<void>  {
+    await this.usersApi.registerCheck(`${API_URL}/register`, this.user).toPromise().then(registered => { this.registerValid = registered });
+    if (this.registerValid) {
+      this.router.navigate(['/home']);
+    }
   }
 }

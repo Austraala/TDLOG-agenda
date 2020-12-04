@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   async login(): Promise<void> {
     console.log('Attempting to connect');
     await this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).toPromise().then(res => { this.loginValid = res; });
-    if (this.loginValid === true) {
+    if (this.loginValid) {
       localStorage.setItem('username', JSON.stringify({ username: this.user.username }));
       this.router.navigate(['/home']);
     }

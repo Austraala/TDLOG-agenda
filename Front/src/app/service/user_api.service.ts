@@ -26,7 +26,7 @@ export class UserApiService {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
     }
 
-  public registerCheck(url: string, user: User): Promise<any> {
-    return this.http.post<boolean>(url, user).toPromise();
+  public registerCheck(url: string, user: User): Observable<boolean> {
+    return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
   }
 }
