@@ -1,3 +1,12 @@
 <p>home works!</p>
-<p>Welcome {{getLogin()}} !</p>
+<p>Welcome {{user.username}} !</p>
+
+<div>
+  <ul>
+    <li *ngFor="let task of tasksList">
+      {{task.name}}
+    </li>
+  </ul>
+</div>
+
 <a (click)="logout()">Log out</a>

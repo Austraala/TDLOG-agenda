@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { User } from '../models/classes.model';
+import { Task } from '../models/classes.model';
 
 @Injectable()
 export class UserApiService {
@@ -21,12 +22,23 @@ export class UserApiService {
     return this.http.get<User[]>(url).catch(UserApiService._handleError);
   }
 
+  // GET user by username
+  public getUser(url: string, username: string): Observable<User> {
+    return this.http.post<User>(url, username).catch(UserApiService._handleError);
+  }
+
   // Call login / logout route in flask
   public loginCheck(url: string, user: User): Observable<boolean> {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
     }
 
+  // Call register route in flask
   public registerCheck(url: string, user: User): Observable<boolean> {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
+  }
+
+  // GET list of tasks
+   public getTasks(url: string, user: User): Observable<Task[]> {
+    return this.http.post<Task[]>(url, user).catch(UserApiService._handleError);
   }
 }

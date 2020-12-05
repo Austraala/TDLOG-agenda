@@ -25,11 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.loggedUser = params.loggedUser;
     });
-    if (this.loggedUser === new User('', '', '', '')) {
-      this.router.navigate(['/login']);
-    } else {
-
-    }
   }
 
   ngOnDestroy(): void {

@@ -15,7 +15,7 @@ import time
 from Back.src.algorithm.crypto import encrypt, compare
 from Back.src.entities.user import User
 from Back.src.entities.task import Task
-from Back.src.entities.schemas import UserSchema
+from Back.src.entities.schemas import UserSchema, TaskSchema
 
 app = f.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:///database.db'
@@ -53,7 +53,6 @@ def logout():
     """ Remove the username from the session if it is there """
     user_form = f.request.json
     username_form = user_form['username']
-    print(username_form)
     print("---------------------", logged_in_list)
     logged_in_list.remove('{}'.format(username_form))
     print("---------------------", logged_in_list)
@@ -100,6 +99,42 @@ def get_users():
     # serializing as JSON
     session.close()
     return f.jsonify(users)
+
+
+@app.route('/user', methods=['POST'])
+def get_user():
+    """ Grabs all users in the database """
+    # fetching from the database
+
+    username = f.request.json
+    session = Session()
+    user = session.query(User).filter(User.username == username['username']).first()
+
+    # transforming into JSON-serializable objects
+    schema = UserSchema()
+    user = schema.dump(user)
+
+    # serializing as JSON
+    session.close()
+    return f.jsonify(user)
+
+
+@app.route('/tasks', methods=['POST'])
+def get_tasks():
+    """ Grabs all tasks for the selected user in the database """
+    # fetching from the database
+    user_front = f.request.json
+
+    session = Session()
+    task_objects = session.query(Task).filter(Task.user_id == user_front['id']).all()
+
+    # transforming into JSON-serializable objects
+    schema = TaskSchema(many=True)
+    tasks = schema.dump(task_objects)
+
+    # serializing as JSON
+    session.close()
+    return f.jsonify(tasks)
 
 
 if __name__ == '__main__':
