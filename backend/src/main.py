@@ -12,17 +12,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 import time
-from Back.src.algorithm.crypto import encrypt, compare
-from Back.src.entities.user import User
-from Back.src.entities.task import Task
-from Back.src.entities.schemas import UserSchema, TaskSchema
+from algorithm.crypto import encrypt, compare
+from entities.user import User
+from entities.task import Task
+from entities.schemas import UserSchema, TaskSchema
 
 app = f.Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:////database.db'
 CORS(app)
 
 # Sets things up for sqlalchemy
-engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
+engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
@@ -80,7 +80,7 @@ def register():
     session.add(user)
     session.commit()
 
-    # return created user
+    # return true if it worked
     session.close()
     return f.jsonify(True), 201
 
@@ -135,6 +135,25 @@ def get_tasks():
     # serializing as JSON
     session.close()
     return f.jsonify(tasks)
+
+
+@app.route('/add_task', methods=['POST'])
+def add_task():
+    """ Adds a task to the current user """
+    # mount task object
+    task_form = f.request.json
+
+    session = Session()
+    user = session.query(User).filter(User.username == task_form['user']['username']).first()
+    task = Task(user.id, task_form['name'], task_form['duration'], task_form['difficulty'])
+
+    # persist task
+    session.add(task)
+    session.commit()
+
+    # return true
+    session.close()
+    return f.jsonify(True), 201
 
 
 if __name__ == '__main__':

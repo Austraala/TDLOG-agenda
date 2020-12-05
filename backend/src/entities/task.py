@@ -23,7 +23,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", back_populates="tasks")
-    name = Column(String, unique=True)
+    name = Column(String)
     duration = Column(Integer)
     difficulty = Column(Integer)
     type = Column(String(50))
