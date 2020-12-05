@@ -29,3 +29,7 @@ def test_test_simultaneity():
     """ Tests if the simultaneity check works correctly """
 
     assert test_simultaneity(constraint_three_test, constraint_four_test)
+
+#   Tests for organize_schedule
+
+
