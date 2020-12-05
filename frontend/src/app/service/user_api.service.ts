@@ -38,7 +38,12 @@ export class UserApiService {
   }
 
   // GET list of tasks
-   public getTasks(url: string, user: User): Observable<Task[]> {
+  public getTasks(url: string, user: User): Observable<Task[]> {
     return this.http.post<Task[]>(url, user).catch(UserApiService._handleError);
+  }
+
+  // POST a task
+  public postTask(url: string, task: Task): Observable<boolean> {
+    return this.http.post<boolean>(url, task).catch(UserApiService._handleError);
   }
 }

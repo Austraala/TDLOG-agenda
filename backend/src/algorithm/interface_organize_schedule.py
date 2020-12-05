@@ -5,7 +5,7 @@
 
 """
 
-from Back.src.algorithm.toolbox_organize_schedule import Constraint
+from algorithm.toolbox_organize_schedule import Constraint
 
 
 def get_constraints(list_tasks_to_implement):

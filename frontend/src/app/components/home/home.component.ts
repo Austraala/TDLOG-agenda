@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { API_URL } from '../../env';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -13,9 +13,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  difficulties = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   username = '';
   user: User = new User('', '', '', '');
+
+  task: Task = new Task(this.user, '', 0, 0);
+
   logoutValid = false;
+
   tasksListSubs: Subscription = new Subscription();
   tasksList: Task[] = [];
 
@@ -27,6 +33,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     .then(result => { this.user = result; }, console.error);
     this.tasksListSubs = this.usersApi.getTasks(`${API_URL}/tasks`, this.user)
     .subscribe(result => { this.tasksList = result; }, console.error);
+    this.task.user = this.user;
+  }
+
+
+  addTask(): void  {
+    console.log(this.user);
+    this.usersApi.postTask(`${API_URL}/add_task`, this.task).toPromise();
+    this.task = new Task(this.user, '', 0, 0);
+    this.ngOnInit();
   }
 
 

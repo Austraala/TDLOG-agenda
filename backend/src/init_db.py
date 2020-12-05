@@ -19,7 +19,7 @@ from algorithm.crypto import encrypt
 
 
 # Sets things up for sqlalchemy
-engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
+engine = create_engine("sqlite+pysqlite:////database.db", echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 

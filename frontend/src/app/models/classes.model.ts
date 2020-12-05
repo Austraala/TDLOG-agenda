@@ -25,7 +25,7 @@ export class Task {
   ) { }
 }
 
-export class MobileTask {
+export class FixedTask {
   constructor(
     public beginningDate: number,
     public recurring: number,
@@ -34,7 +34,7 @@ export class MobileTask {
   ) { }
 }
 
-export class FixedTask {
+export class  MobileTask {
   constructor(
     public deadline: number,
     public division: number,
