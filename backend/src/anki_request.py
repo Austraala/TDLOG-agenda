@@ -10,7 +10,7 @@ r = requests.post('http://127.0.0.1:8765', json={
             "css": "Optional CSS with default to builtin css",
             "cardTemplates": [
                 {
-                    "Front": "Front html {{Name}}",
+                    "frontend": "frontend html {{Name}}",
                     "Back": "Back html  {{Duration}}"
                 }
             ]
@@ -25,7 +25,7 @@ r = requests.post('http://127.0.0.1:8765', json={
             "css": "Optional CSS with default to builtin css",
             "cardTemplates": [
                 {
-                    "Front": "Front html {{Name}}",
+                    "frontend": "frontend html {{Name}}",
                     "Back": "Back html  {{Duration}}"
                 }
             ]
@@ -40,7 +40,7 @@ r = requests.post('http://127.0.0.1:8765', json={
                 "css": "Optional CSS with default to builtin css",
                 "cardTemplates": [
                     {
-                        "Front": "Front html {{Name}}",
+                        "frontend": "frontend html {{Name}}",
                         "Back": "Back html  {{Duration}}"
                     }
                 ]

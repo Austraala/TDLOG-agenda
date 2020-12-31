@@ -1,9 +1,9 @@
 {
-  "name": "front",
+  "name": "frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~11.0.0",
     "@angular/platform-browser-dynamic": "~11.0.0",
     "@angular/router": "~11.0.0",
+    "npm": "^6.14.9",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.3",
     "tslib": "^2.0.0",
@@ -42,5 +43,17 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.0.2"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.0.",
+  "main": "karma.conf.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Austraala/TDLOG-agenda.git"
+  },
+  "author": "Jean-Loup Raymond",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Austraala/TDLOG-agenda/issues"
+  },
+  "homepage": "https://github.com/Austraala/TDLOG-agenda#readme"
 }
