@@ -8,8 +8,8 @@ This is a pytest file. To run with pytest
 
 import datetime
 
-from .task import Task, FixedTask, MobileTask
-from .schedule import Day, Week, Schedule
+from ...src.entities.task import Task, FixedTask, MobileTask
+from ...src.entities.schedule import Day, Week, Schedule
 # from ..algorithm.optimize import
 
 # Defines tested variables

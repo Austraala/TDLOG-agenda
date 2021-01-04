@@ -5,17 +5,16 @@ This is the main file for dev
    ENPC - (c)
 
 """
+# pylint: disable=E0401
 
 import flask as f
+from algorithm.crypto import encrypt, compare
+from entities.schemas import UserSchema, TaskSchema
+from entities.task import Task
+from entities.user import User
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-import time
-from algorithm.crypto import encrypt, compare
-from entities.user import User
-from entities.task import Task
-from entities.schemas import UserSchema, TaskSchema
 
 app = f.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:////database.db'

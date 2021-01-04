@@ -8,14 +8,16 @@ This file defines the process through which we assign a starting date to each ta
 # pylint: disable=E0401, R0902, R0913, R1705
 
 # Imports
-from Back.src.entities.task import FixedTask  # Task, MobileTask
-from Back.src.algorithm.toolbox_organize_schedule import Constraint, \
-    time_to_hour_and_minute, minute_and_hour_to_time, test_simultaneity, \
-    merge_time_constraints, smooth_time_constraints, compare_time_constraints, \
-    sort_time_constraints
-from Back.src.algorithm.interface_organize_schedule import get_constraints, \
-    get_schedule_from_constraints, \
-    get_constraints_from_schedule
+# from ..entities.task import FixedTask, Task, MobileTask
+from .toolbox_organize_schedule import sort_time_constraints
+# Constraint, time_to_hour_and_minute, minute_and_hour_to_time, check_simultaneity, \
+# merge_time_constraints, smooth_time_constraints, compare_time_constraints
+
+from .interface_organize_schedule import get_constraints, \
+    get_schedule_from_constraints
+# get_constraints_from_schedule
+
+
 # from entities.schedule import Schedule, Week, Day
 
 

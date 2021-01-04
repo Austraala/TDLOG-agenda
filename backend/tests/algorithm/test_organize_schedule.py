@@ -8,8 +8,8 @@ This is a pytest file. To run with pytest
 """
 # pylint: disable=E0401
 
-from Back.src.algorithm.organize_schedule import merge_time_constraints, \
-    test_simultaneity  # , smooth_time_constraints, register_constraint
+from ...src.algorithm.toolbox_organize_schedule import merge_time_constraints, \
+    check_simultaneity  # , smooth_time_constraints, register_constraint
 
 
 constraint_one_test, constraint_two_test, constraint_three_test, constraint_four_test\
@@ -25,9 +25,9 @@ def test_merge_time_constraints():
         list_constraint_test, constraint_one_test, constraint_two_test) == [9, 13]
 
 
-def test_test_simultaneity():
+def test_check_simultaneity():
     """ Tests if the simultaneity check works correctly """
 
-    assert test_simultaneity(constraint_three_test, constraint_four_test)
+    assert check_simultaneity(constraint_three_test, constraint_four_test)
 
 #   Tests for organize_schedule

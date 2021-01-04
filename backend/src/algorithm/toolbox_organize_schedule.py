@@ -56,7 +56,7 @@ def minute_and_hour_to_time(minute, hour):
     return hour * 60 + minute
 
 
-def test_simultaneity(constraint_one, constraint_two):
+def check_simultaneity(constraint_one, constraint_two):
     """
     This function returns True if both constraints share a time slot.
     It returns False otherwise.
@@ -116,7 +116,7 @@ def smooth_time_constraints(list_constraints):
 
     for constraint_one in list_constraints:
         for constraint_two in list_constraints:
-            if test_simultaneity(constraint_one, constraint_two):
+            if check_simultaneity(constraint_one, constraint_two):
                 merge_time_constraints(list_constraints, constraint_one, constraint_two)
     return list_constraints
 
