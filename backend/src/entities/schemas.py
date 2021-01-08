@@ -45,8 +45,7 @@ TaskSchema.fixed_task = fields.List(fields.Nested(FixedTaskSchema))
 class MobileTaskSchema(Schema):
     """ Marshmallow class to allow json manipulation of fixed task"""
     id = fields.Number()
-    deadline = fields.Number()
-    divisions = fields.Number()
+    deadline = fields.String()
     task = fields.Nested(TaskSchema)
 
 

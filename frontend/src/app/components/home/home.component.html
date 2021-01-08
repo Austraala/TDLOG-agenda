@@ -1,21 +1,22 @@
-<p>home works!</p>
-<p>Welcome {{user.username}} !</p>
+<div class="row-mt-3">
+  <div class="col-md-8">
+    <h1>Welcome {{user.username}} !</h1>
+    <button class="btn btn-secondary" style="background-color:#888" (click)="logout()">Log out</button>
+    <p>Here are your tasks : </p>
+    <ul>
+      <li *ngFor="let mobileTask of mobileTasksList">
+        {{mobileTask.task!.name}} to do before {{mobileTask.deadline}}
+      </li>
+    </ul>
+  </div>
 
-<div>
-  <ul>
-    <li *ngFor="let task of tasksList">
-      {{task.name}}
-    </li>
-  </ul>
-</div>
-
-<p>Create a task</p>
-
+  <span class="col-md-4 border">
+    <h3 style="margin-top:-10px">Create a task</h3>
     <form (ngSubmit)="addTask()" novalidate>
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="enter name" [(ngModel)]="task.name"
-          name="name" required>
+        <input type="text" class="form-control" id="name" placeholder="enter name" [(ngModel)]="task.name" name="name"
+          required>
       </div>
       <div class="form-group">
         <label for="duration">Duration</label>
@@ -28,7 +29,12 @@
           <option *ngFor="let difficulty of difficulties" [value]="difficulty">{{difficulty}}</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="deadline">Deadline</label>
+        <input type="text" class="form-control" id="deadline" placeholder="enter deadline"
+          [(ngModel)]="mobileTask.deadline" name="deadline" required>
+      </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
-
-<a (click)="logout()">Log out</a>
+  </span>
+</div>

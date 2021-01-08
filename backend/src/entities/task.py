@@ -111,21 +111,19 @@ class MobileTask(Task):
     __tablename__ = 'mobile_tasks'
 
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
-    deadline = Column(Integer)
-    divisions = Column(Integer)
+    deadline = Column(String)
     task = relationship("Task", back_populates="mobile_task")
 
     __mapper_args__ = dict(polymorphic_identity='mobile_tasks')
 
-    def __init__(self, task, deadline, divisions):
+    def __init__(self, task, deadline):
         """
         We call the __init__ function of the class Task
         and we define the additional parameters
         """
-
+        print("-------------------------", task, "-------------------------")
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
         self.deadline = deadline
-        self.divisions = divisions
 
     def __repr__(self):
         """
@@ -135,15 +133,13 @@ class MobileTask(Task):
         to do before deadline, in divisions times
         """
 
-        return "Mobile" + super().__repr__() + ", to do before " + str(self.deadline) \
-               + ", in " + str(self.divisions) + " times"
+        return "Mobile" + super().__repr__() + ", to do before " + str(self.deadline)
 
     def __eq__(self, other):
         """ Returns True if everything besides
         assignment_date is the same """
 
-        return (super().__eq__(other) * (self.deadline == other.deadline)
-                * (self.divisions == other.divisions))
+        return super().__eq__(other) * (self.deadline == other.deadline)
 
 
 Task.mobile_task = relationship("FixedTask", back_populates="task")

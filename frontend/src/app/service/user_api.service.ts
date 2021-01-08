@@ -4,8 +4,7 @@ import { throwError } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { User } from '../models/classes.model';
-import { Task } from '../models/classes.model';
+import { User, MobileTask } from '../models/classes.model';
 
 @Injectable()
 export class UserApiService {
@@ -30,20 +29,20 @@ export class UserApiService {
   // Call login / logout route in flask
   public loginCheck(url: string, user: User): Observable<boolean> {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
-    }
+  }
 
   // Call register route in flask
   public registerCheck(url: string, user: User): Observable<boolean> {
     return this.http.post<boolean>(url, user).catch(UserApiService._handleError);
   }
 
-  // GET list of tasks
-  public getTasks(url: string, user: User): Observable<Task[]> {
-    return this.http.post<Task[]>(url, user).catch(UserApiService._handleError);
+  // GET list of mobile tasks
+  public getMobileTasks(url: string, user: User): Observable<MobileTask[]> {
+    return this.http.post<MobileTask[]>(url, user).catch(UserApiService._handleError);
   }
 
-  // POST a task
-  public postTask(url: string, task: Task): Observable<boolean> {
-    return this.http.post<boolean>(url, task).catch(UserApiService._handleError);
+  // POST a mobile task
+  public postMobileTask(url: string, mobileTask: MobileTask): Observable<boolean> {
+    return this.http.post<boolean>(url, mobileTask).catch(UserApiService._handleError);
   }
 }

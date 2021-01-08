@@ -5,13 +5,13 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-constructor(
-  private router: Router
-) { }
+  constructor(
+    private router: Router
+  ) { }
 
-canActivate(
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     // Check if the user is connected
     const alreadyLoggedIn = !(localStorage.getItem('username') === null);
 

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { UserApiService } from '../../service/user_api.service';
 import { API_URL } from '../../env';
 

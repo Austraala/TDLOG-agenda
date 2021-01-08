@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { API_URL } from '../../env';
 import { Subscription } from 'rxjs/Subscription';
 
-import { User } from '../../models/classes.model';
-import { Task } from '../../models/classes.model';
+import { User, Task, MobileTask } from '../../models/classes.model';
 import { UserApiService } from '../../service/user_api.service';
 import { Router } from '@angular/router';
 
@@ -19,28 +18,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   user: User = new User('', '', '', '');
 
   task: Task = new Task(this.user, '', 0, 0);
+  mobileTask: MobileTask = new MobileTask("date dummy", this.task);
 
   logoutValid = false;
 
-  tasksListSubs: Subscription = new Subscription();
-  tasksList: Task[] = [];
+  mobileTasksListSubs: Subscription = new Subscription();
+  mobileTasksList: MobileTask[] = [];
 
   constructor(private usersApi: UserApiService, private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.username = JSON.parse(localStorage.getItem('username') || '{}');
     await this.usersApi.getUser(`${API_URL}/user`, this.username).toPromise()
-    .then(result => { this.user = result; }, console.error);
-    this.tasksListSubs = this.usersApi.getTasks(`${API_URL}/tasks`, this.user)
-    .subscribe(result => { this.tasksList = result; }, console.error);
+      .then(result => { this.user = result; }, console.error);
+    this.mobileTasksListSubs = this.usersApi.getMobileTasks(`${API_URL}/mobile_tasks`, this.user)
+      .subscribe(result => { this.mobileTasksList = result; }, console.error);
     this.task.user = this.user;
   }
 
 
-  addTask(): void  {
+  addTask(): void {
     console.log(this.user);
-    this.usersApi.postTask(`${API_URL}/add_task`, this.task).toPromise();
+    this.usersApi.postMobileTask(`${API_URL}/add_mobile_task`, this.mobileTask).toPromise();
     this.task = new Task(this.user, '', 0, 0);
+    this.mobileTask = new MobileTask("date dummy", this.task);
     this.ngOnInit();
   }
 
@@ -55,6 +56,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.tasksListSubs.unsubscribe();
+    this.mobileTasksListSubs.unsubscribe();
   }
 }

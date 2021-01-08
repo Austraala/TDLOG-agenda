@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserApiService } from './service/user_api.service';
 import { User } from './models/classes.model';
 import { API_URL } from './env';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',

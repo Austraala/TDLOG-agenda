@@ -1,33 +1,36 @@
 <div class="row">
-  <div class="col-md-4">
-    <h1>Register</h1>
-    <hr><br>
-    <form (ngSubmit)="register()" novalidate>
-      <div class="form-group">
+  <span class="col-md-4"></span>
+  <div class="col-md-4 border">
+    <form class="form" (ngSubmit)="register()" novalidate>
+      <h3 style="margin-top:-10px">Login</h3>
+      <div class="form-group row">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" placeholder="enter username" [(ngModel)]="user.username"
           name="username" required>
       </div>
-      <div class="form-group">
+      <div class="form-group row">
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" placeholder="enter password"
           [(ngModel)]="user.password" name="password" required>
       </div>
-      <div class="form-group">
+      <div class="form-group row">
         <label for="gender">Gender</label>
         <select class="form-control" id="gender" [(ngModel)]="user.gender" name="gender" required>
           <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group row">
         <label for="email">Email</label>
         <input type="text" class="form-control" id="email" placeholder="enter email" [(ngModel)]="user.email"
           name="email" required>
       </div>
-      <button type="submit" class="btn btn-default">Submit</button>
+      <div class="flex-row form-group">
+        <button type="submit" class="btn btn-secondary pull-right btn-custom">Submit</button>
+      </div>
     </form>
     <div *ngIf="!registerValid">
       {{user.username}} already taken
     </div>
   </div>
+  <span class="col-md-4"></span>
 </div>

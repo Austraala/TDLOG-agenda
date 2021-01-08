@@ -61,10 +61,10 @@ session.commit()
 
 task_dummy_5 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Programming', 120, 7)
-mobile_task_dummy_1 = MobileTask(task_dummy_5, 'December 10th', 3)
+mobile_task_dummy_1 = MobileTask(task_dummy_5, '10/12/2020 15:00')
 task_dummy_6 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Spanish', 50, 8)
-mobile_task_dummy_2 = MobileTask(task_dummy_6, 'January 13th', 1)
+mobile_task_dummy_2 = MobileTask(task_dummy_6, '13/01/2020 12:00')
 user_dummy.tasks += [mobile_task_dummy_1, mobile_task_dummy_2]
 session.add(mobile_task_dummy_1, mobile_task_dummy_2)
 session.commit()

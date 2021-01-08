@@ -34,10 +34,9 @@ export class FixedTask {
   ) { }
 }
 
-export class  MobileTask {
+export class MobileTask {
   constructor(
-    public deadline: number,
-    public division: number,
+    public deadline: string,
     public task?: Task,
     public day?: Day,
     public id?: number,

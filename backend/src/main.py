@@ -9,8 +9,8 @@ This is the main file for dev
 
 import flask as f
 from algorithm.crypto import encrypt, compare
-from entities.schemas import UserSchema, TaskSchema
-from entities.task import Task
+from entities.schemas import UserSchema, TaskSchema, MobileTaskSchema
+from entities.task import Task, MobileTask
 from entities.user import User
 from flask_cors import CORS
 from sqlalchemy import create_engine
@@ -102,7 +102,7 @@ def get_users():
 
 @app.route('/user', methods=['POST'])
 def get_user():
-    """ Grabs all users in the database """
+    """ Grabs an user in the database from a form """
     # fetching from the database
 
     username = f.request.json
@@ -118,36 +118,41 @@ def get_user():
     return f.jsonify(user)
 
 
-@app.route('/tasks', methods=['POST'])
-def get_tasks():
-    """ Grabs all tasks for the selected user in the database """
+@app.route('/mobile_tasks', methods=['POST'])
+def get_mobile_tasks():
+    """ Grabs all mobile tasks for the selected user in the database """
     # fetching from the database
     user_front = f.request.json
 
     session = Session()
-    task_objects = session.query(Task).filter(Task.user_id == user_front['id']).all()
+    mobile_task_objects = session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
 
     # transforming into JSON-serializable objects
-    schema = TaskSchema(many=True)
-    tasks = schema.dump(task_objects)
+    schema = MobileTaskSchema(many=True)
+    tasks = schema.dump(mobile_task_objects)
 
     # serializing as JSON
     session.close()
     return f.jsonify(tasks)
 
 
-@app.route('/add_task', methods=['POST'])
-def add_task():
+@app.route('/add_mobile_task', methods=['POST'])
+def add_mobile_task():
     """ Adds a task to the current user """
     # mount task object
-    task_form = f.request.json
+    mobile_task_form = f.request.json
+    print("-----------------------------------------------------------", mobile_task_form)
 
     session = Session()
-    user = session.query(User).filter(User.username == task_form['user']['username']).first()
-    task = Task(user.id, task_form['name'], task_form['duration'], task_form['difficulty'])
+    user = session.query(User).filter(User.username == mobile_task_form['task']['user']['username']).first()
+    task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
+                mobile_task_form['task']['difficulty'])
+    print(task)
+    mobile_task = MobileTask(task, mobile_task_form['deadline'])
 
     # persist task
     session.add(task)
+    session.add(mobile_task)
     session.commit()
 
     # return true
