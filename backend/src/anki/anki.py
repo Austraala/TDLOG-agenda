@@ -34,8 +34,17 @@ def clear_deck(decks):
         create_deck(deck)
 
 
+def cards_in_deck(deck):
+    return requests.post('http://127.0.0.1:8765', json={
+        "action": "findCards",
+        "version": 6,
+        "params": {
+            "query": "deck:" + deck
+        }
+    }).json()
+
+
 def basic_note(deck, front, back):
-    print("basic(" + deck + " ; " + front + " ; " + back + ")")
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
         "version": 6,
@@ -53,7 +62,6 @@ def basic_note(deck, front, back):
 
 
 def basic_reversed_note(deck, front, back):
-    print("reverse(" + deck + " ; " + front + " ; " + back + ")")
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
         "version": 6,
@@ -71,7 +79,6 @@ def basic_reversed_note(deck, front, back):
 
 
 def basic_optional_reversed_note(deck, front, back, add_reverse):
-    print("optreverse(" + deck + " ; " + front + " ; " + back + " ; " + add_reverse + ")")
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
         "version": 6,
@@ -90,7 +97,6 @@ def basic_optional_reversed_note(deck, front, back, add_reverse):
 
 
 def basic_typein_note(deck, front, back):
-    print("typein(" + deck + " ; " + front + " ; " + back + ")")
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
         "version": 6,
@@ -126,7 +132,6 @@ def transform_for_cloze(sentence, hidden_words):
 
 
 def cloze_note(deck, sentence, hidden_words):
-    print("cloze(" + transform_for_cloze(sentence, hidden_words) + ")")
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
         "version": 6,
@@ -142,22 +147,3 @@ def cloze_note(deck, sentence, hidden_words):
     })
 
 
-decks_to_create = ["AnaCS", "MMC1", "PhyStat", "Optimisation"]
-
-for deck_to_create in decks_to_create:
-    create_deck(deck_to_create)
-
-print(deck_names())
-
-basic_note("AnaCS", "Basic ?", "Yes, basic.")
-basic_note("AnaCS", "Still basic ?", "Yes, still basic.")
-basic_typein_note("MMC1", "Type in ?", "Yes, type in.")
-basic_reversed_note("MMC1", "Reversed ?", "Yes, reversed.")
-basic_note("MMC1", "Oh my, ...", "...I'm going to be deleted !")
-basic_note("MMC1", "Oh my god, ...", "...me too !")
-basic_optional_reversed_note("Optimisation", "Opt Reverse ?", "Yes, opt reverse.", "The reverse.")
-basic_note("PhyStat", "Oh my lord, ...", "...I'm going to be homeless !")
-cloze_note("PhyStat", "Well yes, I would like a cloze card please my dear sir, thank you !",
-           ["yes", "would", "cloze", "my dear sir"])
-
-#clear_deck(decks_to_create)
