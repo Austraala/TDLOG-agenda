@@ -7,7 +7,6 @@ export class User {
     public gender: string,
     public email: string,
     public tasks?: Task,
-    public schedule?: Schedule,
     public id?: number,
   ) { }
 }
@@ -36,37 +35,8 @@ export class FixedTask {
 
 export class MobileTask {
   constructor(
-    public deadline: string,
+    public deadline: Date,
     public task?: Task,
-    public day?: Day,
     public id?: number,
-  ) { }
-}
-
-export class Schedule {
-  constructor(
-    public user: User,
-    public weeks?: Week,
-    public id?: number,
-    public userId?: number,
-  ) { }
-}
-
-export class Week {
-  constructor(
-    public schedule: Schedule,
-    public days?: Day,
-    public id?: number,
-    public scheduleId?: number,
-  ) { }
-}
-
-export class Day {
-  constructor(
-    public week: Week,
-    public fixedTasks?: FixedTask,
-    public id?: number,
-    public weekId?: number,
-    public fixedTaskId?: number,
   ) { }
 }

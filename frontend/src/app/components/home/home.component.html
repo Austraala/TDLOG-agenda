@@ -1,16 +1,45 @@
-<div class="row-mt-3">
-  <div class="col-md-8">
-    <h1>Welcome {{user.username}} !</h1>
-    <button class="btn btn-secondary" style="background-color:#888" (click)="logout()">Log out</button>
-    <p>Here are your tasks : </p>
-    <ul>
-      <li *ngFor="let mobileTask of mobileTasksList">
-        {{mobileTask.task!.name}} to do before {{mobileTask.deadline}}
-      </li>
-    </ul>
-  </div>
+<head>
+  <link href="https://unpkg.com/angular-calendar@0.28.22/css/angular-calendar.css" rel="stylesheet">
+</head>
 
-  <span class="col-md-4 border">
+
+<div class="row">
+  <div class="col-md-8">
+    <app-calendar-header [(view)]="view" [(viewDate)]="viewDate">
+    </app-calendar-header>
+
+<div [ngSwitch]="view" style="margin-top:20px">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [activeDayIsOpen]="true"
+    [refresh]="refresh"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-day-view>
+</div>
+
+
+  </div>
+  <div class="col-md-3 border">
+    <div class="row">
     <h3 style="margin-top:-10px">Create a task</h3>
     <form (ngSubmit)="addTask()" novalidate>
       <div class="form-group">
@@ -31,10 +60,18 @@
       </div>
       <div class="form-group">
         <label for="deadline">Deadline</label>
-        <input type="text" class="form-control" id="deadline" placeholder="enter deadline"
+        <input type="date" class="form-control" id="deadline" placeholder="enter deadline"
           [(ngModel)]="mobileTask.deadline" name="deadline" required>
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
-  </span>
+      </div>
+    <div class="row" style="margin-top:30px">
+      Here are your current tasks :
+    </div>
+    <div class="row" *ngFor="let mobileTask of mobileTasksList">
+      {{mobileTask.task!.name}}
+    </div>
+  </div>
+  <div class="col-md-1"><button class="btn btn-default" (click)="logout()">Log out</button></div>
 </div>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UserApiService } from '../../service/user_api.service';
 import { API_URL } from '../../env';
 
-import { User, Task, Schedule } from '../../models/classes.model';
+import { User, Task } from '../../models/classes.model';
 
 @Component({
   selector: 'app-log-in',

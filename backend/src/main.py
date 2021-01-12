@@ -123,7 +123,7 @@ def get_mobile_tasks():
     """ Grabs all mobile tasks for the selected user in the database """
     # fetching from the database
     user_front = f.request.json
-
+    print("vbwldregrebjkbskpbgsjwkbnjwsl", user_front)
     session = Session()
     mobile_task_objects = session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
 
