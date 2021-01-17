@@ -7,6 +7,7 @@ This is the main file for dev
 """
 # pylint: disable=E0401
 
+from datetime import datetime
 import flask as f
 from algorithm.crypto import encrypt, compare
 from entities.schemas import UserSchema, FixedTaskSchema, MobileTaskSchema
@@ -15,7 +16,6 @@ from entities.user import User
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from datetime import datetime
 from backend.anki.anki import create_deck, delete_deck, clear_deck, \
     basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
 
@@ -125,7 +125,8 @@ def get_mobile_tasks():
     # fetching from the database
     user_front = f.request.json
     session = Session()
-    mobile_task_objects = session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
+    mobile_task_objects = \
+        session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
 
     # transforming into JSON-serializable objects
     schema = MobileTaskSchema(many=True)
@@ -143,7 +144,9 @@ def add_mobile_task():
     mobile_task_form = f.request.json
 
     session = Session()
-    user = session.query(User).filter(User.username == mobile_task_form['task']['user']['username']).first()
+    user = \
+        session.query(User).filter(User.username == \
+                                   mobile_task_form['task']['user']['username']).first()
     task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
                 mobile_task_form['task']['difficulty'])
     mobile_task = MobileTask(task, datetime.strptime(mobile_task_form['deadline'], "%Y-%m-%d"))
@@ -164,7 +167,8 @@ def get_fixed_tasks():
     # fetching from the database
     user_front = f.request.json
     session = Session()
-    fixed_task_objects = session.query(FixedTask).filter(FixedTask.user_id == user_front['id']).all()
+    fixed_task_objects = \
+        session.query(FixedTask).filter(FixedTask.user_id == user_front['id']).all()
 
     # transforming into JSON-serializable objects
     schema = FixedTaskSchema(many=True)
@@ -177,46 +181,53 @@ def get_fixed_tasks():
 
 @app.route('/organize_schedule', methods=['POST'])
 def fix_mobile_tasks():
+    """ Allocates a fixed period to a mobile task """
     return 0
 
 
-@app.route('/create_deck', methods=['POST'])
-def create_deck():
+@app.route('/create', methods=['POST'])
+def create():
+    """ Creates an Anki deck """
     deck_name = f.request.json
     create_deck(deck_name['name'])
     return 201
 
 
-@app.route('/delete_deck', methods=['POST'])
-def delete_deck():
+@app.route('/delete', methods=['POST'])
+def delete():
+    """ Deletes an Anki deck """
     deck_name = f.request.json
     delete_deck(deck_name['name'])
     return 201
 
 
-@app.route('/clear_deck', methods=['POST'])
-def clear_deck():
+@app.route('/clear', methods=['POST'])
+def clear():
+    """ Removes all cards from an Anki deck """
     deck_name = f.request.json
     clear_deck(deck_name['name'])
     return 201
 
 
-@app.route('/basic_note', methods=['POST'])
-def basic_note():
+@app.route('/basic', methods=['POST'])
+def basic():
+    """ Creates a "Basic"-modelled Anki card """
     basic_note_form = f.request.json
     basic_note(basic_note_form['deck_name'], basic_note_form['front'], basic_note_form['back'])
 
 
-@app.route('/basic_reversed_note', methods=['POST'])
-def basic_reversed_note():
+@app.route('/basic_reversed', methods=['POST'])
+def basic_reversed():
+    """ Creates a "Basic (and reversed card)"-modelled Anki card """
     basic_reversed_note_form = f.request.json
     basic_reversed_note(basic_reversed_note_form['deck_name'],
                         basic_reversed_note_form['front'],
                         basic_reversed_note_form['back'])
 
 
-@app.route('/basic_optional_reversed_note', methods=['POST'])
-def basic_optional_reversed_note():
+@app.route('/basic_optional_reversed', methods=['POST'])
+def basic_optional_reversed():
+    """ Creates a "Basic (optional reversed card)"-modelled Anki card """
     basic_optreversed_note_form = f.request.json
     basic_optional_reversed_note(basic_optreversed_note_form['deck_name'],
                                  basic_optreversed_note_form['front'],
@@ -224,16 +235,18 @@ def basic_optional_reversed_note():
                                  basic_optreversed_note_form['add_reverse'])
 
 
-@app.route('/basic_typein_note', methods=['POST'])
-def basic_typein_note():
+@app.route('/basic_typein', methods=['POST'])
+def basic_typein():
+    """ Creates a "Basic (type in the answer)"-modelled Anki card """
     basic_typein_note_form = f.request.json
     basic_typein_note(basic_typein_note_form['deck_name'],
                       basic_typein_note_form['front'],
                       basic_typein_note_form['back'])
 
 
-@app.route('/cloze_note', methods=['POST'])
-def cloze_note():
+@app.route('/cloze', methods=['POST'])
+def cloze():
+    """ Creates a "Cloze"-modelled Anki card """
     cloze_note_form = f.request.json
     cloze_note(cloze_note_form['deck_name'],
                cloze_note_form['sentence'],
