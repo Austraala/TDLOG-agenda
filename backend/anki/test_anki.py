@@ -1,4 +1,4 @@
-from anki import create_deck, deck_names, delete_deck, clear_deck, cards_in_deck, synchro_ankiweb, \
+from anki import create_deck, deck_names, list_deck_ids, delete_deck, clear_deck, cards_in_deck, synchro_ankiweb, \
         basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
 
 decks_to_create = ["AnaCS", "MMC1", "PhyStat", "Optimisation", "Programmation"]
@@ -7,6 +7,7 @@ for deck_to_create in decks_to_create:
     create_deck(deck_to_create)
 
 print(deck_names())
+print(list_deck_ids())
 
 basic_note("AnaCS", "Basic AnaCS ?", "Yes, basic AnaCS.")
 basic_note("AnaCS", "Still basic AnaCS ?", "Yes, still basic AnaCS.")

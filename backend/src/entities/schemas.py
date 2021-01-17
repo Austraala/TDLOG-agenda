@@ -82,3 +82,4 @@ class DaySchema(Schema):
 
 FixedTaskSchema.day = fields.Nested(DaySchema)
 WeekSchema.days = fields.List(fields.Nested(DaySchema))
+
