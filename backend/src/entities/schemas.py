@@ -34,7 +34,7 @@ UserSchema.task = fields.Nested(TaskSchema)
 class FixedTaskSchema(Schema):
     """ Marshmallow class to allow json manipulation of fixed task"""
     id = fields.Number()
-    start = fields.Date()
+    start = fields.DateTime()
     task = fields.Nested(TaskSchema)
 
 

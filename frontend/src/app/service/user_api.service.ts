@@ -38,7 +38,6 @@ export class UserApiService {
 
   // POST a mobile task
   public postMobileTask(url: string, mobileTask: MobileTask): Observable<boolean> {
-    console.log(mobileTask.deadline)
     return this.http.post<boolean>(url, mobileTask).catch(UserApiService._handleError);
   }
 
@@ -47,7 +46,7 @@ export class UserApiService {
     return this.http.post<FixedTask[]>(url, user).catch(UserApiService._handleError);
   }
 
-  public getDecks(url: string, user: User): Observable<String[]> {
-    return this.http.post<String[]>(url, user).catch(UserApiService._handleError);
+  public getDecks(url: string, user: User): Observable<string[]> {
+    return this.http.post<string[]>(url, user).catch(UserApiService._handleError);
   }
 }
