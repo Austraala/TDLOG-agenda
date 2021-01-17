@@ -168,7 +168,9 @@ def remove_mobile_task():
     mobile_task_form = f.request.json
 
     session = Session()
-    user = session.query(User).filter(User.username == mobile_task_form['task']['user']['username']).first()
+    user = \
+        session.query(User).filter(User.username == \
+                                   mobile_task_form['task']['user']['username']).first()
     task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
                 mobile_task_form['task']['difficulty'])
     mobile_task = MobileTask(task, datetime.strptime(mobile_task_form['deadline'], "%Y-%m-%d"))
