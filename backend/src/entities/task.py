@@ -74,14 +74,14 @@ class FixedTask(Task):
 
     __mapper_args__ = dict(polymorphic_identity='fixed_tasks')
 
-    def __init__(self, task, beginning_date, recurring):
+    def __init__(self, task, start):
         """
         We call the __init__ function of the class Task
         and we define the additional parameters
         """
 
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
-        self.start = beginning_date
+        self.start = start
 
     def __repr__(self):
         """

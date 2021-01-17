@@ -16,11 +16,6 @@ export class UserApiService {
     return throwError(err.message || 'Error: Unable to complete request.');
   }
 
-  // GET list of users
-  public getUsers(url: string): Observable<User[]> {
-    return this.http.get<User[]>(url).catch(UserApiService._handleError);
-  }
-
   // GET user by username
   public getUser(url: string, username: string): Observable<User> {
     return this.http.post<User>(url, username).catch(UserApiService._handleError);
@@ -50,5 +45,9 @@ export class UserApiService {
   // GET list of mobile tasks
   public getFixedTasks(url: string, user: User): Observable<FixedTask[]> {
     return this.http.post<FixedTask[]>(url, user).catch(UserApiService._handleError);
+  }
+
+  public getDecks(url: string, user: User): Observable<String[]> {
+    return this.http.post<String[]>(url, user).catch(UserApiService._handleError);
   }
 }

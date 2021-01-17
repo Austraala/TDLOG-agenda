@@ -148,6 +148,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
   eventTimesChanged({
     event,
     newStart,
@@ -181,6 +196,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileTasksListSubs.unsubscribe();
+    this.fixedTasksListSubs.unsubscribe();
   }
 }
 

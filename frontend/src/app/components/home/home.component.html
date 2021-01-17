@@ -5,7 +5,7 @@
 
 <div class="row">
   <div class="col-md-8">
-    <app-calendar-header [(view)]="view" [(viewDate)]="viewDate">
+    <app-calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
     </app-calendar-header>
 
 <div [ngSwitch]="view" style="margin-top:20px">
@@ -13,8 +13,9 @@
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"
     [events]="events"
-    [activeDayIsOpen]="true"
+    [activeDayIsOpen]="activeDayIsOpen"
     [refresh]="refresh"
+    (dayClicked)="dayClicked($event.day)"
     (eventTimesChanged)="eventTimesChanged($event)"
   >
   </mwl-calendar-month-view>

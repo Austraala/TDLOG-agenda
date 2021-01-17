@@ -12,8 +12,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
-  usersListSubs: Subscription = new Subscription();
-  usersList: User[] = [];
   loggedUserSubs: Subscription = new Subscription();
   loggedUser: User = new User('', '', '', '');
 
@@ -21,13 +19,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.usersListSubs = this.usersApi.getUsers(`${API_URL}/users`).subscribe(res => { this.usersList = res; }, console.error);
     this.route.queryParams.subscribe(params => {
       this.loggedUser = params.loggedUser;
     });
   }
 
   ngOnDestroy(): void {
-    this.usersListSubs.unsubscribe();
+    this.loggedUserSubs.unsubscribe();
   }
 }

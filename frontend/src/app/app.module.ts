@@ -16,6 +16,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { UserApiService } from './service/user_api.service';
 import { AuthGuard } from './service/auth/auth.guard';
 import { DemoUtilsModule } from './service/calendar-header/module';
+import { CardsComponent } from './components/cards/cards.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { DemoUtilsModule } from './service/calendar-header/module';
     LoginComponent,
     HomeComponent,
     RegisterComponent,
+    CardsComponent,
   ],
   imports: [
     CommonModule,
