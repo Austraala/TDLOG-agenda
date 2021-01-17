@@ -35,10 +35,10 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers:[DatePipe]
+  providers: [DatePipe]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  constructor(private usersApi: UserApiService, private router: Router, private datePipe : DatePipe) { }
+  constructor(private usersApi: UserApiService, private router: Router, private datePipe: DatePipe) { }
   difficulties = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   username = '';
@@ -59,17 +59,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   events: CalendarEvent[] = [];
 
   activeDayIsOpen = true;
-
   view: CalendarView = CalendarView.Month;
-
   CalendarView = CalendarView;
-
   viewDate: Date = new Date();
 
   async ngOnInit(): Promise<void> {
-    await this.load()
+    await this.load();
 
-    for (let mobileTask of this.mobileTasksList) {
+    for (const mobileTask of this.mobileTasksList) {
         this.events = [
         ...this.events,
         {
@@ -84,10 +81,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
         ];
-        console.log(this.events)
+        console.log(this.events);
         }
 
-    for (let fixedTask of this.fixedTasksList) {
+    for (const fixedTask of this.fixedTasksList) {
         this.events = [
         ...this.events,
         {
@@ -102,11 +99,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
         ];
-        console.log(fixedTask)
+        console.log(fixedTask);
         }
     this.task.user = this.user;
     this.refresh.next();
-    this.refresh.next()
   }
 
   async load(): Promise<void> {
@@ -117,7 +113,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addTask(): void {
-    console.log(this.user);
     this.usersApi.postMobileTask(`${API_URL}/add_mobile_task`, this.mobileTask).toPromise();
     this.events = [
       ...this.events,
@@ -133,10 +128,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
       },
     ];
-    this.mobileTasksList = [...this.mobileTasksList, this.mobileTask]
+    this.mobileTasksList = [...this.mobileTasksList, this.mobileTask];
     this.task = new Task(this.user, '', 0, 0);
     this.mobileTask = new MobileTask(this.datePipe.transform(new Date(), 'yyyy-MM-dd'), this.task);
-    this.refresh.next()
+    this.refresh.next();
+  }
+
+
+  deleteTask(eventToDelete: CalendarEvent): void {
+    this.events = this.events.filter((event) => event !== eventToDelete);
+    this.usersApi.postMobileTask(`${API_URL}/remove_mobile_task`, this.mobileTask).toPromise();
+    this.ngOnInit()
   }
 
 
@@ -163,6 +165,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+
   eventTimesChanged({
     event,
     newStart,
@@ -182,17 +185,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-  deleteEvent(eventToDelete: CalendarEvent): void {
-    this.events = this.events.filter((event) => event !== eventToDelete);
-  }
-
   setView(view: CalendarView): void {
     this.view = view;
   }
 
+
   closeOpenMonthViewDay(): void {
     this.activeDayIsOpen = false;
   }
+
 
   ngOnDestroy(): void {
     this.mobileTasksListSubs.unsubscribe();

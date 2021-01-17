@@ -45,7 +45,7 @@ def login():
             logged_in_list.append(username_form)
             print("---------------------", logged_in_list)
             session.close()
-            return f.jsonify(True)
+            return f.jsonify(True), 201
     return f.jsonify(False)
 
 
@@ -56,7 +56,7 @@ def logout():
     username_form = user_form['username']
     logged_in_list.remove('{}'.format(username_form))
     print("---------------------", logged_in_list)
-    return f.jsonify(True)
+    return f.jsonify(True), 201
 
 
 @app.route('/register', methods=['POST'])
@@ -155,7 +155,29 @@ def add_mobile_task():
 
     # return true
     session.close()
-    return f.jsonify(True), 201
+    return 201
+
+
+@app.route('/remove_mobile_task', methods=['POST'])
+def remove_mobile_task():
+    """ Removes a mobile task to the current user """
+    # mount task object
+    mobile_task_form = f.request.json
+
+    session = Session()
+    user = session.query(User).filter(User.username == mobile_task_form['task']['user']['username']).first()
+    task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
+                mobile_task_form['task']['difficulty'])
+    mobile_task = MobileTask(task, datetime.strptime(mobile_task_form['deadline'], "%Y-%m-%d"))
+
+    # persist task
+    session.remove(task)
+    session.remove(mobile_task)
+    session.commit()
+
+    # return true
+    session.close()
+    return 201
 
 
 @app.route('/fixed_tasks', methods=['POST'])
@@ -241,5 +263,5 @@ def cloze_note():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
     Session.remove()

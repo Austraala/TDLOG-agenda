@@ -20,7 +20,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   logoutValid = false;
 
   decksListSubs: Subscription = new Subscription();
-  decksList: String[] = [];
+  decksList: string[] = [];
 
   ngOnInit(): void {
     this.load();

@@ -52,10 +52,10 @@ session.commit()
 # fixed and mobile task dummies
 task_dummy_3 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Mechanics', 90, 9)
-fixed_task_dummy_1 = FixedTask(task_dummy_3, datetime(2021, 1, 16, 13), False)
+fixed_task_dummy_1 = FixedTask(task_dummy_3, datetime(2021, 1, 16, 13))
 task_dummy_4 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Stat. Phy.', 45, 6)
-fixed_task_dummy_2 = FixedTask(task_dummy_4, datetime(2021, 1, 16, 12), True)
+fixed_task_dummy_2 = FixedTask(task_dummy_4, datetime(2021, 1, 16, 12))
 user_dummy.tasks += [fixed_task_dummy_1, fixed_task_dummy_2]
 session.add(fixed_task_dummy_1, fixed_task_dummy_2)
 session.commit()
