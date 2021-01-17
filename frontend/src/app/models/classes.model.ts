@@ -26,8 +26,7 @@ export class Task {
 
 export class FixedTask {
   constructor(
-    public beginningDate: number,
-    public recurring: number,
+    public start: Date,
     public task?: Task,
     public id?: number,
   ) { }
@@ -35,7 +34,7 @@ export class FixedTask {
 
 export class MobileTask {
   constructor(
-    public deadline: Date,
+    public deadline: string | null,
     public task?: Task,
     public id?: number,
   ) { }

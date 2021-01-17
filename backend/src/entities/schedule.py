@@ -110,7 +110,7 @@ class Day(Base):
 
     def implement_task(self, task, position):
         """ adds the task to the day planning """
-        # ATTENTION A CORRIGER : le format de beginning_date est une date, pas un entier.
+        # ATTENTION A CORRIGER : le format de start est une date, pas un entier.
         # Prendre simplement range(task.duration // 5 ) ??
         # ATTENTION : g�n�rer l'heure de d�but avant le for.
         # Tests NECESSAIRES

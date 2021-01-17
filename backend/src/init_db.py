@@ -13,7 +13,8 @@ from sqlalchemy.orm import sessionmaker, with_polymorphic
 from entities.user import User
 from entities.task import Base, Task, FixedTask, MobileTask
 from algorithm.crypto import encrypt
-# from entities.schedule import Schedule, Week, Day
+
+from datetime import datetime
 
 # pylint: disable=E1101
 
@@ -51,20 +52,20 @@ session.commit()
 # fixed and mobile task dummies
 task_dummy_3 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Mechanics', 90, 9)
-fixed_task_dummy_1 = FixedTask(task_dummy_3, '16/04/2000', False)
+fixed_task_dummy_1 = FixedTask(task_dummy_3, datetime(2021, 1, 16, 13), False)
 task_dummy_4 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Stat. Phy.', 45, 6)
-fixed_task_dummy_2 = FixedTask(task_dummy_4, '16/04/2000', True)
+fixed_task_dummy_2 = FixedTask(task_dummy_4, datetime(2021, 1, 16, 12), True)
 user_dummy.tasks += [fixed_task_dummy_1, fixed_task_dummy_2]
 session.add(fixed_task_dummy_1, fixed_task_dummy_2)
 session.commit()
 
 task_dummy_5 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Programming', 120, 7)
-mobile_task_dummy_1 = MobileTask(task_dummy_5, '10/12/2020 15:00')
+mobile_task_dummy_1 = MobileTask(task_dummy_5, datetime(2020, 12, 10))
 task_dummy_6 = Task(session.query("id FROM users WHERE username = 'Archlinux'")
                     .first()[0], 'Spanish', 50, 8)
-mobile_task_dummy_2 = MobileTask(task_dummy_6, '13/01/2020 12:00')
+mobile_task_dummy_2 = MobileTask(task_dummy_6, datetime(2021, 1, 13))
 user_dummy.tasks += [mobile_task_dummy_1, mobile_task_dummy_2]
 session.add(mobile_task_dummy_1, mobile_task_dummy_2)
 session.commit()

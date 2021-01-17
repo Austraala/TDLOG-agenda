@@ -15,7 +15,7 @@ from ...src.entities.schedule import Day, Week, Schedule
 # Defines tested variables
 # Name, duration, difficulty
 task_try = Task(0, 'Try', 10, 5)
-# Task, beginning_date, Recurring
+# Task, start, Recurring
 fixed_task_try = FixedTask(task_try, '16/04/2000', False)
 # Task, deadline, number of divisions possible
 mobile_task_try = MobileTask(task_try, 'november 10th', 3)

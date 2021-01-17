@@ -8,7 +8,7 @@ This file defines the class Task for our planning system
 # pylint: disable=E1101, E0401
 
 # Imports
-from sqlalchemy import ForeignKey, Column, Integer, String, Boolean
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Date
 from sqlalchemy.orm import relationship
 from .user import Base, User
 
@@ -31,13 +31,13 @@ class Task(Base):
     __mapper_args__ = dict(polymorphic_identity='tasks', polymorphic_on=type)
 
     def __init__(self, user_id, name, duration, difficulty):
-        """ We get the duration, name, difficulty and labels from the user """
+        """ We get the duration, name, difficulty from the user"""
 
         self.user_id = user_id
         self.name = name
         self.duration = duration
         self.difficulty = difficulty
-        self.beginning_date = None
+        self.start = None
 
     def __repr__(self):
         """
@@ -69,8 +69,7 @@ class FixedTask(Task):
     __tablename__ = 'fixed_tasks'
 
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
-    beginning_date = Column(Integer)
-    recurring = Column(Boolean)
+    start = Column(DateTime)
     task = relationship("Task", back_populates="fixed_task")
 
     __mapper_args__ = dict(polymorphic_identity='fixed_tasks')
@@ -82,22 +81,21 @@ class FixedTask(Task):
         """
 
         super().__init__(task.user_id, task.name, task.duration, task.difficulty)
-        self.beginning_date = beginning_date
-        self.recurring = recurring
+        self.start = beginning_date
 
     def __repr__(self):
         """
         Returns
         FixedTask(name : name, duration : duration minutes,
-        difficulty : difficulty/10, labels : [labels]) begins on : beginning_date
+        difficulty : difficulty/10, labels : [labels]) begins on : start
         """
 
-        return "Fixed" + super().__repr__() + " begins on : " + str(self.beginning_date)
+        return "Fixed" + super().__repr__() + " begins on : " + str(self.start)
 
     def __eq__(self, other):
         """ Returns True if everything is the same """
 
-        return super().__eq__(other) * (self.beginning_date == other.beginning_date)
+        return super().__eq__(other) * (self.start == other.start)
 
 
 Task.fixed_task = relationship("FixedTask", back_populates="task")
@@ -111,7 +109,7 @@ class MobileTask(Task):
     __tablename__ = 'mobile_tasks'
 
     id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
-    deadline = Column(String)
+    deadline = Column(Date)
     task = relationship("Task", back_populates="mobile_task")
 
     __mapper_args__ = dict(polymorphic_identity='mobile_tasks')

@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { User, MobileTask } from '../models/classes.model';
+import { User, MobileTask, FixedTask } from '../models/classes.model';
 
 @Injectable()
 export class UserApiService {
@@ -43,6 +43,12 @@ export class UserApiService {
 
   // POST a mobile task
   public postMobileTask(url: string, mobileTask: MobileTask): Observable<boolean> {
+    console.log(mobileTask.deadline)
     return this.http.post<boolean>(url, mobileTask).catch(UserApiService._handleError);
+  }
+
+  // GET list of mobile tasks
+  public getFixedTasks(url: string, user: User): Observable<FixedTask[]> {
+    return this.http.post<FixedTask[]>(url, user).catch(UserApiService._handleError);
   }
 }

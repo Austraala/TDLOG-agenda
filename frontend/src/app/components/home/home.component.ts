@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy,
   ViewChild, TemplateRef, } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { startOfDay, endOfDay, subDays, addDays,
-  endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
+  endOfMonth, isSameDay, isSameMonth, addHours, addMinutes } from 'date-fns';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { CalendarEvent, CalendarEventAction,
@@ -10,7 +11,7 @@ import { CalendarEvent, CalendarEventAction,
 } from 'angular-calendar';
 
 import { API_URL } from '../../env';
-import { User, Task, MobileTask } from '../../models/classes.model';
+import { User, Task, MobileTask, FixedTask } from '../../models/classes.model';
 import { UserApiService } from '../../service/user_api.service';
 
 const colors: any = {
@@ -33,21 +34,25 @@ const colors: any = {
   selector: 'app-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers:[DatePipe]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  constructor(private usersApi: UserApiService, private router: Router, private datePipe : DatePipe) { }
   difficulties = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   username = '';
   user: User = new User('', '', '', '');
 
   task: Task = new Task(this.user, '', 0, 0);
-  mobileTask: MobileTask = new MobileTask(new Date(), this.task);
+  mobileTask: MobileTask = new MobileTask(this.datePipe.transform(new Date(), 'yyyy-MM-dd'), this.task);
 
   logoutValid = false;
 
   mobileTasksListSubs: Subscription = new Subscription();
   mobileTasksList: MobileTask[] = [];
+  fixedTasksListSubs: Subscription = new Subscription();
+  fixedTasksList: FixedTask[] = [];
 
   refresh: Subject<any> = new Subject();
 
@@ -61,12 +66,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   viewDate: Date = new Date();
 
-  constructor(private usersApi: UserApiService, private router: Router) { }
-
   async ngOnInit(): Promise<void> {
     await this.load()
 
-      for (let mobileTask of this.mobileTasksList) {
+    for (let mobileTask of this.mobileTasksList) {
         this.events = [
         ...this.events,
         {
@@ -83,13 +86,34 @@ export class HomeComponent implements OnInit, OnDestroy {
         ];
         console.log(this.events)
         }
+
+    for (let fixedTask of this.fixedTasksList) {
+        this.events = [
+        ...this.events,
+        {
+          title: fixedTask.task!.name,
+          start: new Date(fixedTask.start),
+          end: new Date(addMinutes(new Date(fixedTask.start), fixedTask.task!.duration)),
+          color: colors.red,
+          draggable: false,
+          resizable: {
+            beforeStart: false,
+            afterEnd: false,
+          }
+        }
+        ];
+        console.log(fixedTask)
+        }
     this.task.user = this.user;
+    this.refresh.next();
+    this.refresh.next()
   }
 
   async load(): Promise<void> {
     this.username = JSON.parse(localStorage.getItem('username') || '{}');
     await this.usersApi.getUser(`${API_URL}/user`, this.username).toPromise().then(result => { this.user = result; });
     await this.usersApi.getMobileTasks(`${API_URL}/mobile_tasks`, this.user).toPromise().then(result => this.mobileTasksList = result);
+    await this.usersApi.getFixedTasks(`${API_URL}/fixed_tasks`, this.user).toPromise().then(result => this.fixedTasksList = result);
   }
 
   addTask(): void {
@@ -109,9 +133,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
       },
     ];
+    this.mobileTasksList = [...this.mobileTasksList, this.mobileTask]
     this.task = new Task(this.user, '', 0, 0);
-    this.mobileTask = new MobileTask(new Date(), this.task);
-    this.ngOnInit();
+    this.mobileTask = new MobileTask(this.datePipe.transform(new Date(), 'yyyy-MM-dd'), this.task);
+    this.refresh.next()
   }
 
 
@@ -138,6 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       return iEvent;
     });
+
   }
 
 

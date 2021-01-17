@@ -34,8 +34,7 @@ UserSchema.task = fields.Nested(TaskSchema)
 class FixedTaskSchema(Schema):
     """ Marshmallow class to allow json manipulation of fixed task"""
     id = fields.Number()
-    beginning_date = fields.Number()
-    recurring = fields.Boolean()
+    start = fields.Date()
     task = fields.Nested(TaskSchema)
 
 
@@ -45,7 +44,7 @@ TaskSchema.fixed_task = fields.List(fields.Nested(FixedTaskSchema))
 class MobileTaskSchema(Schema):
     """ Marshmallow class to allow json manipulation of fixed task"""
     id = fields.Number()
-    deadline = fields.String()
+    deadline = fields.Date()
     task = fields.Nested(TaskSchema)
 
 

@@ -9,12 +9,13 @@ This is the main file for dev
 
 import flask as f
 from algorithm.crypto import encrypt, compare
-from entities.schemas import UserSchema, TaskSchema, MobileTaskSchema
-from entities.task import Task, MobileTask
+from entities.schemas import UserSchema, FixedTaskSchema, MobileTaskSchema
+from entities.task import Task, MobileTask, FixedTask
 from entities.user import User
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from datetime import datetime
 
 app = f.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:////database.db'
@@ -39,7 +40,6 @@ def login():
     user_candidate_list = session.query(User).filter(User.username == username_form)
     for user in user_candidate_list:
         if compare(password_form, user.password):
-            print("---------------------", logged_in_list)
             logged_in_list.append(username_form)
             print("---------------------", logged_in_list)
             session.close()
@@ -52,7 +52,6 @@ def logout():
     """ Remove the username from the session if it is there """
     user_form = f.request.json
     username_form = user_form['username']
-    print("---------------------", logged_in_list)
     logged_in_list.remove('{}'.format(username_form))
     print("---------------------", logged_in_list)
     return f.jsonify(True)
@@ -123,7 +122,6 @@ def get_mobile_tasks():
     """ Grabs all mobile tasks for the selected user in the database """
     # fetching from the database
     user_front = f.request.json
-    print("vbwldregrebjkbskpbgsjwkbnjwsl", user_front)
     session = Session()
     mobile_task_objects = session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
 
@@ -138,17 +136,15 @@ def get_mobile_tasks():
 
 @app.route('/add_mobile_task', methods=['POST'])
 def add_mobile_task():
-    """ Adds a task to the current user """
+    """ Adds a mobile task to the current user """
     # mount task object
     mobile_task_form = f.request.json
-    print("-----------------------------------------------------------", mobile_task_form)
 
     session = Session()
     user = session.query(User).filter(User.username == mobile_task_form['task']['user']['username']).first()
     task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
                 mobile_task_form['task']['difficulty'])
-    print(task)
-    mobile_task = MobileTask(task, mobile_task_form['deadline'])
+    mobile_task = MobileTask(task, datetime.strptime(mobile_task_form['deadline'], "%Y-%m-%d"))
 
     # persist task
     session.add(task)
@@ -158,6 +154,28 @@ def add_mobile_task():
     # return true
     session.close()
     return f.jsonify(True), 201
+
+
+@app.route('/fixed_tasks', methods=['POST'])
+def get_fixed_tasks():
+    """ Grabs all fixed tasks for the selected user in the database """
+    # fetching from the database
+    user_front = f.request.json
+    session = Session()
+    fixed_task_objects = session.query(FixedTask).filter(FixedTask.user_id == user_front['id']).all()
+
+    # transforming into JSON-serializable objects
+    schema = FixedTaskSchema(many=True)
+    tasks = schema.dump(fixed_task_objects)
+
+    # serializing as JSON
+    session.close()
+    return f.jsonify(tasks)
+
+
+@app.route('/organize_schedule', methods=['POST'])
+def fix_mobile_tasks():
+    return 0
 
 
 if __name__ == '__main__':
