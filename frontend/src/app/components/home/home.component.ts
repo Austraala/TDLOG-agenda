@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy,
-  ViewChild, TemplateRef, } from '@angular/core';
+  ViewChild, TemplateRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { startOfDay, endOfDay, subDays, addDays,
@@ -75,10 +75,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           end: endOfDay(new Date()),
           color: colors.blue,
           draggable: true,
-          resizable: {
-            beforeStart: true,
-            afterEnd: true,
-          }
         }
         ];
         console.log(this.events);
@@ -93,10 +89,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           end: new Date(addMinutes(new Date(fixedTask.start), fixedTask.task!.duration)),
           color: colors.red,
           draggable: false,
-          resizable: {
-            beforeStart: false,
-            afterEnd: false,
-          }
         }
         ];
         console.log(fixedTask);
@@ -135,10 +127,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-  deleteTask(eventToDelete: CalendarEvent): void {
-    this.events = this.events.filter((event) => event !== eventToDelete);
-    this.usersApi.postMobileTask(`${API_URL}/remove_mobile_task`, this.mobileTask).toPromise();
-    this.ngOnInit()
+  async deleteMobileTask(mobileTaskToDelete: MobileTask): Promise<void> {
+    this.events = []
+    this.mobileTasksList = [];
+    this.fixedTasksList = [];
+    await this.usersApi.postMobileTask(`${API_URL}/remove_mobile_task`, this.mobileTask).toPromise();
+    this.ngOnInit();
   }
 
 

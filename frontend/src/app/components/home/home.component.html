@@ -72,6 +72,7 @@
     </div>
     <div class="row" *ngFor="let mobileTask of mobileTasksList">
       {{mobileTask.task!.name}}
+       <button class="btn btn-default" (click)="deleteMobileTask(mobileTask)">Delete</button>
     </div>
     <div class="row" style="margin-top:30px">
       Your current fixed tasks :

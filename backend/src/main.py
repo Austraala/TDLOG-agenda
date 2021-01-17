@@ -14,7 +14,7 @@ from entities.schemas import UserSchema, FixedTaskSchema, MobileTaskSchema
 from entities.task import Task, MobileTask, FixedTask
 from entities.user import User
 from flask_cors import CORS
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete
 from sqlalchemy.orm import sessionmaker, scoped_session
 from backend.anki.anki import create_deck, delete_deck, clear_deck, \
     basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
@@ -158,12 +158,12 @@ def add_mobile_task():
 
     # return true
     session.close()
-    return 201
+    return f.jsonify(mobile_task), 201
 
 
 @app.route('/remove_mobile_task', methods=['POST'])
 def remove_mobile_task():
-    """ Removes a mobile task to the current user """
+    """ Removes a mobile task to the current user /// BUGGED !!!!!!!!!!!!!"""
     # mount task object
     mobile_task_form = f.request.json
 
@@ -175,14 +175,14 @@ def remove_mobile_task():
                 mobile_task_form['task']['difficulty'])
     mobile_task = MobileTask(task, datetime.strptime(mobile_task_form['deadline'], "%Y-%m-%d"))
 
-    # persist task
-    session.remove(task)
-    session.remove(mobile_task)
+    # remove persisted task
+    session.query(MobileTask).filter(Task == task).delete()
+    session.query(MobileTask).filter(MobileTask == mobile_task).delete()
     session.commit()
 
     # return true
     session.close()
-    return 201
+    return f.jsonify(True), 201
 
 
 @app.route('/fixed_tasks', methods=['POST'])
@@ -278,5 +278,5 @@ def cloze():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     Session.remove()
