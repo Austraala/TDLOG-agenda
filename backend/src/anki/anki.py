@@ -44,6 +44,13 @@ def cards_in_deck(deck):
     }).json()
 
 
+def synchro_ankiweb():
+    requests.post('http://127.0.0.1:8765', json={
+        "action": "sync",
+        "version": 6
+    })
+
+
 def basic_note(deck, front, back):
     requests.post('http://127.0.0.1:8765', json={
         "action": "addNote",
