@@ -12,19 +12,20 @@ def create_deck(deck_name):
 
 
 def deck_names():
-    return requests.post('http://127.0.0.1:8765', json={
+    dict = requests.post('http://127.0.0.1:8765', json={
         "action": "deckNames",
         "version": 6,
     }).json()
+    return [val1 for key1, val1 in dict.items()][0]
 
 
-def list_deck_ids():
-    dict = requests.post('http://127.0.0.1:8765', json={
-        "action": "deckNamesAndIds",
-        "version": 6,
-    }).json()
-    proper_dict = [val1 for key1, val1 in dict.items()][0]
-    return [val2 for key2, val2 in proper_dict.items()]
+#def list_deck_ids():
+#    dict = requests.post('http://127.0.0.1:8765', json={
+#        "action": "deckNamesAndIds",
+#        "version": 6,
+#    }).json()
+#    proper_dict = [val1 for key1, val1 in dict.items()][0]
+#    return [val2 for key2, val2 in proper_dict.items()]
 
 
 def delete_deck(decks):

@@ -16,6 +16,8 @@ from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
+from backend.anki.anki import create_deck, delete_deck, clear_deck, \
+    basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
 
 app = f.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:////database.db'
@@ -176,6 +178,66 @@ def get_fixed_tasks():
 @app.route('/organize_schedule', methods=['POST'])
 def fix_mobile_tasks():
     return 0
+
+
+@app.route('/create_deck', methods=['POST'])
+def create_deck():
+    deck_name = f.request.json
+    create_deck(deck_name['name'])
+    return 201
+
+
+@app.route('/delete_deck', methods=['POST'])
+def delete_deck():
+    deck_name = f.request.json
+    delete_deck(deck_name['name'])
+    return 201
+
+
+@app.route('/clear_deck', methods=['POST'])
+def clear_deck():
+    deck_name = f.request.json
+    clear_deck(deck_name['name'])
+    return 201
+
+
+@app.route('/basic_note', methods=['POST'])
+def basic_note():
+    basic_note_form = f.request.json
+    basic_note(basic_note_form['deck_name'], basic_note_form['front'], basic_note_form['back'])
+
+
+@app.route('/basic_reversed_note', methods=['POST'])
+def basic_reversed_note():
+    basic_reversed_note_form = f.request.json
+    basic_reversed_note(basic_reversed_note_form['deck_name'],
+                        basic_reversed_note_form['front'],
+                        basic_reversed_note_form['back'])
+
+
+@app.route('/basic_optional_reversed_note', methods=['POST'])
+def basic_optional_reversed_note():
+    basic_optreversed_note_form = f.request.json
+    basic_optional_reversed_note(basic_optreversed_note_form['deck_name'],
+                                 basic_optreversed_note_form['front'],
+                                 basic_optreversed_note_form['back'],
+                                 basic_optreversed_note_form['add_reverse'])
+
+
+@app.route('/basic_typein_note', methods=['POST'])
+def basic_typein_note():
+    basic_typein_note_form = f.request.json
+    basic_typein_note(basic_typein_note_form['deck_name'],
+                      basic_typein_note_form['front'],
+                      basic_typein_note_form['back'])
+
+
+@app.route('/cloze_note', methods=['POST'])
+def cloze_note():
+    cloze_note_form = f.request.json
+    cloze_note(cloze_note_form['deck_name'],
+               cloze_note_form['sentence'],
+               cloze_note_form['hidden_words'])
 
 
 if __name__ == '__main__':
