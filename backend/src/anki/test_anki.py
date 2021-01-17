@@ -1,4 +1,5 @@
-from anki import create_deck, deck_names, delete_deck, clear_deck, cards_in_deck, basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
+from anki import create_deck, deck_names, delete_deck, clear_deck, cards_in_deck, synchro_ankiweb, \
+        basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
 
 decks_to_create = ["AnaCS", "MMC1", "PhyStat", "Optimisation", "Programmation"]
 
@@ -19,9 +20,17 @@ cloze_note("PhyStat", "Well yes, I would like a cloze note for the PhyStat pleas
            ["yes", "would", "cloze", "PhyStat", "my dear sir"])
 cloze_note("Programmation", "No need to go to the exam to validate", ["go to the exam"])
 
+#import requests
+#print(requests.post('http://127.0.0.1:8765', json={
+#    "action": "getProfiles",
+#    "version": 6
+#}).json())
+
 #clear_deck(["PhyStat"])
 #delete_deck(["Programmation"])
 
 #delete_deck(decks_to_create)
 
-print(cards_in_deck("AnaCS"))
+#print(cards_in_deck("AnaCS"))
+
+synchro_ankiweb()
