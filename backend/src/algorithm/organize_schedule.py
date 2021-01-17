@@ -140,7 +140,7 @@ def organize_schedule(list_tasks, current_week, current_day):
     """
     This function puts the mobile_tasks where it can, and gives each of them a starting date.
     It gets them one at a time.
-    It returns a list of constraints under the form of a schedule.
+    It returns a list of constraints under the form of a list of fixed tasks.
     """
 
     #   Starts the next day
@@ -167,7 +167,7 @@ def organize_schedule(list_tasks, current_week, current_day):
                 else:
                     check_day += 1
 
-    return get_schedule_from_constraints(list_constraints)
+    return list_constraints
 
 
 #    PART B - OPTIMIZATION WITH SHUFFLE

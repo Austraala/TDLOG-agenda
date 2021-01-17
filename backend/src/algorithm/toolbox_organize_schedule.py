@@ -15,16 +15,15 @@ class Constraint:
         self.name = name
         #   string
         self.week = week
-        #   int
+        #   int between 1 and 52
         self.day = day
-        #   int
+        # int
         self.starting_time = starting_time
         #   int (bw 0 and 1440)
         self.duration = duration
         #   int (in minutes)
         self.deadline = deadline
         #   a [week, day, time] list, with time in minutes
-
         #   This one is a bool (False if fixed, True if Mobile)
         self.mobile = mobile
 
@@ -142,7 +141,7 @@ def compare_time_constraints(constraint_one, constraint_two):
     #   Check if both are fixed :
     if not constraint_one.mobile and not constraint_two.mobile:
 
-        if constraint_one.week < constraint_two.week or constraint_one.dy < constraint_two.day:
+        if constraint_one.week < constraint_two.week or constraint_one.day < constraint_two.day:
             return -1
         return -2 * (constraint_one[2] < constraint_two[2]) + 1
 
