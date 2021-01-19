@@ -34,7 +34,6 @@ logged_in_list = []
 @app.route('/login_back', methods=['POST'])
 def login():
     """ If the connection information fits database, adds user to logged in list"""
-
     user_form = f.request.json
     username_form = user_form['username']
     password_form = user_form['password'].encode('utf-8')
