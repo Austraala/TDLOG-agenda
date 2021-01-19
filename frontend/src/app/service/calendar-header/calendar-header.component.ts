@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CalendarView } from 'angular-calendar';
 
+// The structure of this file is different from other components because it only
+// gives a header, on Home component
 @Component({
   selector: 'app-calendar-header',
   template: `

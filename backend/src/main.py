@@ -99,7 +99,7 @@ def get_users():
 
     # serializing as JSON
     session.close()
-    return f.jsonify(users)
+    return f.jsonify(users), 201
 
 
 @app.route('/user', methods=['POST'])
@@ -117,7 +117,7 @@ def get_user():
 
     # serializing as JSON
     session.close()
-    return f.jsonify(user)
+    return f.jsonify(user), 201
 
 
 @app.route('/mobile_tasks', methods=['POST'])
@@ -131,11 +131,11 @@ def get_mobile_tasks():
 
     # transforming into JSON-serializable objects
     schema = MobileTaskSchema(many=True)
-    tasks = schema.dump(mobile_task_objects)
+    mobile_tasks = schema.dump(mobile_task_objects)
 
     # serializing as JSON
     session.close()
-    return f.jsonify(tasks)
+    return f.jsonify(mobile_tasks), 201
 
 
 @app.route('/add_mobile_task', methods=['POST'])
@@ -159,14 +159,13 @@ def add_mobile_task():
 
     # return true
     session.close()
-    schema = MobileTaskSchema(many=True)
-    mobile_task_json = schema.dump(mobile_task)
-    return f.jsonify(mobile_task_json), 201
+    return f.jsonify(True), 201
 
 
 @app.route('/remove_mobile_task', methods=['POST'])
 def remove_mobile_task():
-    """ Removes a mobile task to the current user /// BUGGED !!!!!!!!!!!!!"""
+    """ Removes a mobile task to the current user
+    /// NotImplementedError - change SQLite to PostgreSQL """
     # mount task object
     mobile_task_form = f.request.json
 
@@ -203,7 +202,7 @@ def get_fixed_tasks():
 
     # serializing as JSON
     session.close()
-    return f.jsonify(fixed_tasks)
+    return f.jsonify(fixed_tasks), 201
 
 
 @app.route('/organize_schedule', methods=['POST'])
@@ -219,6 +218,7 @@ def fix_mobile_tasks():
         session.query(FixedTask).filter(FixedTask.user_id == user_front['id']).all()
     mobile_task_objects = \
         session.query(MobileTask).filter(MobileTask.user_id == user_front['id']).all()
+    session.close()
 
     # transforming into JSON-serializable objects
     fixed_task_schema = FixedTaskSchema(many=True)
@@ -226,10 +226,9 @@ def fix_mobile_tasks():
     mobile_task_schema = MobileTaskSchema(many=True)
     mobile_tasks = mobile_task_schema.dump(mobile_task_objects)
     list_tasks = list(fixed_tasks) + list(mobile_tasks)
-    session.close()
 
     organize_schedule(list_tasks, month, day)
-    return f.jsonify(True)
+    return f.jsonify(True), 201
 
 
 @app.route('/create', methods=['POST'])
@@ -307,5 +306,5 @@ def create_cloze_card():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     Session.remove()

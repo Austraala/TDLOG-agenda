@@ -9,6 +9,7 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) { }
 
+  // Condition to be able to see Home and Cards
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {

@@ -19,6 +19,7 @@ import { API_URL } from '../../env';
 import { User, Task, MobileTask, FixedTask } from '../../models/classes.model';
 import { UserApiService } from '../../service/user_api.service';
 
+// Colors for the events on the calendar
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -44,30 +45,39 @@ const colors: any = {
 })
 export class HomeComponent implements OnInit, OnDestroy {
   constructor(private usersApi: UserApiService, private router: Router, private datePipe: DatePipe) { }
+  // To refresh angular-calendar
+  refresh: Subject<any> = new Subject();
+
+  // Options for the difficulty select button of the form
   difficulties = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  // Logged user
   username = '';
   user: User = new User('', '', '', '');
 
+  // Current task from the HTML form
   task: Task = new Task(this.user, '', 0, 0);
   mobileTask: MobileTask = new MobileTask(this.datePipe.transform(new Date(), 'yyyy-MM-dd'), this.task);
 
+  // True if user was correctly logged in and can log out
   logoutValid = false;
 
+  // Will contain mobile and fixed tasks from backend
   mobileTasksListSubs: Subscription = new Subscription();
   mobileTasksList: MobileTask[] = [];
   fixedTasksListSubs: Subscription = new Subscription();
   fixedTasksList: FixedTask[] = [];
 
-  refresh: Subject<any> = new Subject();
-
+  // List of events displayed by angular-calendar
   events: CalendarEvent[] = [];
 
+  // Miscellaneous var for angular-calendar's good behaviour
   activeDayIsOpen = true;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
 
+  // Gets everything from backend then display it
   async ngOnInit(): Promise<void> {
     await this.load();
 
@@ -102,6 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.refresh.next();
   }
 
+  // Loads everything from backend to frontend
   async load(): Promise<void> {
     this.username = JSON.parse(localStorage.getItem('username') || '{}');
     await this.usersApi.getUser(`${API_URL}/user`, this.username).toPromise().then(result => { this.user = result; });
@@ -109,6 +120,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.usersApi.getFixedTasks(`${API_URL}/fixed_tasks`, this.user).toPromise().then(result => this.fixedTasksList = result);
   }
 
+  // Adds a mobile task to the database
   addTask(): void {
     this.usersApi.postMobileTask(`${API_URL}/add_mobile_task`, this.mobileTask).toPromise();
     this.events = [
@@ -131,7 +143,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.refresh.next();
   }
 
-
+  // Deletes a mobile task from the database - Bugged - Switch to postgreSQL
   async deleteMobileTask(mobileTaskToDelete: MobileTask): Promise<void> {
     this.events = [];
     this.mobileTasksList = [];
@@ -140,7 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
 
-
+  // Reset current list of tasks, place tasks with backend algorithm, then reload - Bugged
   async placeTasks(): Promise<void> {
     this.events = [];
     this.mobileTasksList = [];
@@ -149,7 +161,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
 
-
+  // Check if the user is logged in, then removes token from cache, and redirects to log in page
   logout(): void {
     console.log('Attempting to disconnect');
     this.usersApi.loginCheck(`${API_URL}/logout_back`, this.user)
@@ -158,7 +170,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-
+  // Changed focused day on angular-calendar
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -173,7 +185,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  // Changes event start / end. Should change it on the backend - NYI
   eventTimesChanged({
     event,
     newStart,
@@ -192,17 +204,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-
+  // Changes type of view (month, week, day)
   setView(view: CalendarView): void {
     this.view = view;
   }
-
 
   closeOpenMonthViewDay(): void {
     this.activeDayIsOpen = false;
   }
 
-
+  // Destroy subscriptions
   ngOnDestroy(): void {
     this.mobileTasksListSubs.unsubscribe();
     this.fixedTasksListSubs.unsubscribe();

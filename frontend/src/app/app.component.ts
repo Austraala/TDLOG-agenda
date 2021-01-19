@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private usersApi: UserApiService, private router: Router, private route: ActivatedRoute) {
   }
 
+  // Passes the user as an argument
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.loggedUser = params.loggedUser;

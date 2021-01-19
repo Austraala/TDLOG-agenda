@@ -1,24 +1,21 @@
 # TDLOG-agenda
-a project to realize an automatized planning system with ankidroid learning features
-
-# Feature ideas
-Cookies + Personal Statistics \
-Finished task + get ahead \
-Anki features \
-Mail inscription
-
+a project to realize an automatized planning system with anki learning features
 
 # Backend
 ## Main Technologies
-- flask
-- sqlalchemy
+- Flask
+- SQLalchemy
+
+### Secondary Technologies
+- Marshmallow
+- Bcrypt library
+- Datetime library
 
 ## Architecture
-All the backend stuff is in *backend*. Is contains *src, tests and a Dockerfile*.  
+All the backend stuff is in *backend*. Is contains *src, tests, anki features and a Dockerfile*.  
 *src* contains all the code that is used for the backend and *tests* contains pytest files to test *src*.  
 *src* is subdivided in 4 different categories.  
  - *algorithm* is about the optimization part for the calendar.
- - *anki* is about the anki functions and features.
  - *entities* contains the classes for SQLalchemy to function properly.
  - at the root, there are 2 files, *init_db*, that deploys and mocks a database, and *main*, that starts the app.
 
@@ -30,6 +27,8 @@ Simply use "python main.py", or use the Dockerfile corresponding to the backend 
 # Frontend
 ## Main Technology
 - Angular
+### Secondary Technology
+- Angular-calendar
 
 ## Architecture
 A regular angular app, with a Dockerfile at the root.

@@ -17,6 +17,7 @@ export class RegisterComponent {
   registerValid = true;
   constructor(private usersApi: UserApiService, private router: Router) { }
 
+  // Calls register route asynchronously and adds the given user to the database
   async register(): Promise<void> {
     await this.usersApi.registerCheck(`${API_URL}/register`, this.user).toPromise()
       .then(registered => { this.registerValid = registered; });

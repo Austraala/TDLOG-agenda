@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
+  // Calls login route asynchronously and put a token in the user cache; See focus for more details
   async login(): Promise<void> {
     console.log('Attempting to connect');
     await this.usersApi.loginCheck(`${API_URL}/login_back`, this.user).toPromise().then(res => { this.loginValid = res; });
