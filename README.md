@@ -43,3 +43,5 @@ Use "ng serve" in frontend or start the related Dockerfile via :
 
 # How to start everything locally
 Use "docker-compose build", then "docker-compose up", then head to http://localhost:4200/
+To log in, it is possible to either register, or either run "init_db.py" to mock a database.
+Then, you can log in with "Archlinux", "Admin"
