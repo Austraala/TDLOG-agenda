@@ -238,6 +238,7 @@ def basic():
     """ Creates a "Basic"-modelled Anki card """
     basic_note_form = f.request.json
     basic_note(basic_note_form['deck_name'], basic_note_form['front'], basic_note_form['back'])
+    return 201
 
 
 @app.route('/basic_reversed', methods=['POST'])
@@ -247,6 +248,7 @@ def basic_reversed():
     basic_reversed_note(basic_reversed_note_form['deck_name'],
                         basic_reversed_note_form['front'],
                         basic_reversed_note_form['back'])
+    return 201
 
 
 @app.route('/basic_optional_reversed', methods=['POST'])
@@ -257,6 +259,7 @@ def basic_optional_reversed():
                                  basic_optreversed_note_form['front'],
                                  basic_optreversed_note_form['back'],
                                  basic_optreversed_note_form['add_reverse'])
+    return 201
 
 
 @app.route('/basic_typein', methods=['POST'])
@@ -266,6 +269,7 @@ def basic_typein():
     basic_typein_note(basic_typein_note_form['deck_name'],
                       basic_typein_note_form['front'],
                       basic_typein_note_form['back'])
+    return 201
 
 
 @app.route('/cloze', methods=['POST'])
@@ -275,6 +279,7 @@ def cloze():
     cloze_note(cloze_note_form['deck_name'],
                cloze_note_form['sentence'],
                cloze_note_form['hidden_words'])
+    return 201
 
 
 if __name__ == '__main__':
