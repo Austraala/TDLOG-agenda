@@ -22,6 +22,8 @@ export class CardsComponent implements OnInit, OnDestroy {
   decksListSubs: Subscription = new Subscription();
   decksList: string[] = [];
 
+  deckName: string = "";
+
   ngOnInit(): void {
     this.load();
   }
@@ -33,7 +35,6 @@ export class CardsComponent implements OnInit, OnDestroy {
   async load(): Promise<void> {
     this.username = JSON.parse(localStorage.getItem('username') || '{}');
     await this.usersApi.getUser(`${API_URL}/user`, this.username).toPromise().then(result => { this.user = result; });
-    await this.usersApi.getDecks(`${API_URL}/decks`, this.user).toPromise().then(result => { this.decksList = result; });
   }
 
   logout(): void {
@@ -43,4 +44,10 @@ export class CardsComponent implements OnInit, OnDestroy {
     localStorage.removeItem('username');
     this.router.navigate(['/login']);
   }
-}
+
+  async createAnkiDeck(): Promise<void> {
+    this.decksList= [];
+    await this.usersApi.postDeck(`${API_URL}/create`, this.deckName).toPromise().then(result => {this.decksList = [...this.decksList, result];});
+    this.ngOnInit();
+    }
+  }

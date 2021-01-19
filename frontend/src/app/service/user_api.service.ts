@@ -51,7 +51,13 @@ export class UserApiService {
     return this.http.post<boolean>(url, [user, date]).catch(UserApiService._handleError);
   }
 
+  // GET a list of decks - not done yet
   public getDecks(url: string, user: User): Observable<string[]> {
     return this.http.post<string[]>(url, user).catch(UserApiService._handleError);
+  }
+
+  // POST a deck
+  public postDeck(url: string, name: string): Observable<string>{
+    return this.http.post<string>(url, name).catch(UserApiService._handleError);
   }
 }

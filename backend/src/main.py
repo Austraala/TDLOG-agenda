@@ -233,9 +233,11 @@ def fix_mobile_tasks():
 @app.route('/create', methods=['POST'])
 def create_anki_deck():
     """ Creates an Anki deck """
-    deck_name = f.request.json
+    deck_name = f.request
+    print(deck_name, 'erjkfbndxfbwjlkdnb:wldjfb !mwjfnbjk<snmvgkjwnmgvnwmvgnw')
     create_deck(deck_name['name'])
-    return 201
+    # We should store it in db
+    return f.jsonify(deck_name), 201
 
 
 @app.route('/delete', methods=['POST'])
@@ -243,7 +245,7 @@ def delete_anki_deck():
     """ Deletes an Anki deck """
     deck_name = f.request.json
     delete_deck(deck_name['name'])
-    return 201
+    return f.jsonify(deck_name), 201
 
 
 @app.route('/clear', methods=['POST'])
@@ -251,7 +253,7 @@ def clear_anki_deck():
     """ Removes all cards from an Anki deck """
     deck_name = f.request.json
     clear_deck(deck_name['name'])
-    return 201
+    return f.jsonify(deck_name), 201
 
 
 @app.route('/basic', methods=['POST'])
@@ -259,6 +261,7 @@ def create_basic_card():
     """ Creates a "Basic"-modelled Anki card """
     basic_note_form = f.request.json
     basic_note(basic_note_form['deck_name'], basic_note_form['front'], basic_note_form['back'])
+    f.jsonify(True), 201
 
 
 @app.route('/basic_reversed', methods=['POST'])
@@ -268,6 +271,7 @@ def create_basic_reversed_card():
     basic_reversed_note(basic_reversed_note_form['deck_name'],
                         basic_reversed_note_form['front'],
                         basic_reversed_note_form['back'])
+    f.jsonify(True), 201
 
 
 @app.route('/basic_optional_reversed', methods=['POST'])
@@ -278,6 +282,7 @@ def create_basic_optional_reversed_card():
                                  basic_optional_reversed_note_form['front'],
                                  basic_optional_reversed_note_form['back'],
                                  basic_optional_reversed_note_form['add_reverse'])
+    f.jsonify(True), 201
 
 
 @app.route('/basic_type_in', methods=['POST'])
@@ -287,6 +292,7 @@ def create_basic_type_in_card():
     basic_type_in_note(basic_type_in_note_form['deck_name'],
                        basic_type_in_note_form['front'],
                        basic_type_in_note_form['back'])
+    f.jsonify(True), 201
 
 
 @app.route('/cloze', methods=['POST'])
@@ -296,6 +302,7 @@ def create_cloze_card():
     cloze_note(cloze_note_form['deck_name'],
                cloze_note_form['sentence'],
                cloze_note_form['hidden_words'])
+    f.jsonify(True), 201
 
 
 if __name__ == '__main__':
