@@ -128,10 +128,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   async deleteMobileTask(mobileTaskToDelete: MobileTask): Promise<void> {
-    this.events = []
+    this.events = [];
     this.mobileTasksList = [];
     this.fixedTasksList = [];
     await this.usersApi.postMobileTask(`${API_URL}/remove_mobile_task`, this.mobileTask).toPromise();
+    this.ngOnInit();
+  }
+
+
+  async placeTasks(): Promise<void> {
+    this.events = [];
+    this.mobileTasksList = [];
+    this.fixedTasksList = [];
+    await this.usersApi.postPlaceTasks(`${API_URL}/organize_schedule`, this.user, this.viewDate).toPromise();
     this.ngOnInit();
   }
 

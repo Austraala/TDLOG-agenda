@@ -46,6 +46,11 @@ export class UserApiService {
     return this.http.post<FixedTask[]>(url, user).catch(UserApiService._handleError);
   }
 
+  // POST a request for the back to attribute Mobile Tasks
+  public postPlaceTasks(url: string, user: User, date: Date): Observable<boolean> {
+    return this.http.post<boolean>(url, [user, date]).catch(UserApiService._handleError);
+  }
+
   public getDecks(url: string, user: User): Observable<string[]> {
     return this.http.post<string[]>(url, user).catch(UserApiService._handleError);
   }
