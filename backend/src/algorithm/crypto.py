@@ -6,7 +6,6 @@ This file contains functions to encrypt and decrypt a password
 
 """
 
-
 import bcrypt
 
 

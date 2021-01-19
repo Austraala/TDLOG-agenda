@@ -1,22 +1,19 @@
 """
 This file sets up a database for the project
 
-   Jean-Loup Raymond
+   Jean-Loup RAYMOND
    ENPC - (c)
 
 """
-# pylint: disable=E0401
+# pylint: disable=E0401, E1101
 
+from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, with_polymorphic
 
 from entities.user import User
 from entities.task import Base, Task, FixedTask, MobileTask
 from algorithm.crypto import encrypt
-
-from datetime import datetime
-
-# pylint: disable=E1101
 
 
 # Sets things up for sqlalchemy
@@ -34,7 +31,7 @@ Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 # Prepares an user
-user_dummy = User('Archlinux', encrypt('Bullshit'), 'M', 'mail')
+user_dummy = User('Archlinux', encrypt('Admin'), 'M', 'mail')
 session.add(user_dummy)
 session.commit()
 

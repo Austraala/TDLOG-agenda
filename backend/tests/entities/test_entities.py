@@ -6,6 +6,7 @@ This is a pytest file. To run with pytest
 
 """
 
+
 import datetime
 
 from ...src.entities.task import Task, FixedTask, MobileTask
@@ -16,9 +17,9 @@ from ...src.entities.schedule import Day, Week, Schedule
 # Name, duration, difficulty
 task_try = Task(0, 'Try', 10, 5)
 # Task, start, Recurring
-fixed_task_try = FixedTask(task_try, '16/04/2000', False)
+fixed_task_try = FixedTask(task_try, '16/04/2000')
 # Task, deadline, number of divisions possible
-mobile_task_try = MobileTask(task_try, 'november 10th', 3)
+mobile_task_try = MobileTask(task_try, 'november 10th')
 
 day_try = Day()
 day_try.content[:6] = [None, None, None, task_try, None, task_try, None]

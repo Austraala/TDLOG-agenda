@@ -1,7 +1,7 @@
 """
 This file defines the marshmallow schemas for our planning system
 
-   Jean-Loup Raymond
+   Jean-Loup RAYMOND
    ENPC - (c)
 
 """
@@ -82,4 +82,3 @@ class DaySchema(Schema):
 
 FixedTaskSchema.day = fields.Nested(DaySchema)
 WeekSchema.days = fields.List(fields.Nested(DaySchema))
-

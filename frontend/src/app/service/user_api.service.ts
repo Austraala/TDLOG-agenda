@@ -57,7 +57,7 @@ export class UserApiService {
   }
 
   // POST a deck
-  public postDeck(url: string, name: string): Observable<string>{
+  public postDeck(url: string, name: string): Observable<string> {
     return this.http.post<string>(url, name).catch(UserApiService._handleError);
   }
 }

@@ -22,7 +22,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   decksListSubs: Subscription = new Subscription();
   decksList: string[] = [];
 
-  deckName: string = "";
+  deckName = '';
 
   ngOnInit(): void {
     this.load();
@@ -46,8 +46,9 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 
   async createAnkiDeck(): Promise<void> {
-    this.decksList= [];
-    await this.usersApi.postDeck(`${API_URL}/create`, this.deckName).toPromise().then(result => {this.decksList = [...this.decksList, result];});
+    this.decksList = [];
+    await this.usersApi.postDeck(`${API_URL}/create`, this.deckName).toPromise()
+      .then(result => { this.decksList = [...this.decksList, result]; });
     this.ngOnInit();
-    }
   }
+}

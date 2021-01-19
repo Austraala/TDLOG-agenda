@@ -5,6 +5,8 @@ In this file are functions that are needed and useful for the optimize function.
     ENPC (c)
 
 """
+# pylint: disable=R0902
+# pylint: disable=R0913
 
 
 class Constraint:
@@ -150,13 +152,9 @@ def compare_time_constraints(constraint_one, constraint_two):
             or constraint_one.deadline[1] < constraint_two.deadline[1] \
             or constraint_one.deadline[2] < constraint_two.deadline[2]:
         return -1
-    elif constraint_one.deadline[0] > constraint_two.deadline[0] \
-            or constraint_one.deadline[1] > constraint_two.deadline[1] \
-            or constraint_one.deadline[2] > constraint_two.deadline[2]:
-        return 1
-
-    #   If you can't do it, don't switch them.
-    return 0
+    return (constraint_one.deadline[0] > constraint_two.deadline[0]
+            or constraint_one.deadline[1] > constraint_two.deadline[1]
+            or constraint_one.deadline[2] > constraint_two.deadline[2]) * 1
 
 
 def sort_time_constraints(list_constraints):

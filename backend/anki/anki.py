@@ -5,8 +5,7 @@ This is anki functions file for dev
    ENPC - (c)
 
 """
-
-#pylint: disable = C0114
+# pylint: disable = C0114
 
 import requests
 

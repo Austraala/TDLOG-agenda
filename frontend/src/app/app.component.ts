@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { UserApiService } from './service/user_api.service';
 import { User } from './models/classes.model';
-import { API_URL } from './env';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

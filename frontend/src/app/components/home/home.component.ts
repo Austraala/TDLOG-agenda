@@ -1,12 +1,17 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy,
-  ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, ChangeDetectionStrategy,
+  ViewChild, TemplateRef
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { startOfDay, endOfDay, subDays, addDays,
-  endOfMonth, isSameDay, isSameMonth, addHours, addMinutes } from 'date-fns';
+import {
+  startOfDay, endOfDay, subDays, addDays,
+  endOfMonth, isSameDay, isSameMonth, addHours, addMinutes
+} from 'date-fns';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
-import { CalendarEvent, CalendarEventAction,
+import {
+  CalendarEvent, CalendarEventAction,
   CalendarEventTimesChangedEvent, CalendarView,
 } from 'angular-calendar';
 
@@ -67,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.load();
 
     for (const mobileTask of this.mobileTasksList) {
-        this.events = [
+      this.events = [
         ...this.events,
         {
           title: mobileTask.task!.name,
@@ -76,12 +81,12 @@ export class HomeComponent implements OnInit, OnDestroy {
           color: colors.blue,
           draggable: true,
         }
-        ];
-        console.log(this.events);
-        }
+      ];
+      console.log(this.events);
+    }
 
     for (const fixedTask of this.fixedTasksList) {
-        this.events = [
+      this.events = [
         ...this.events,
         {
           title: fixedTask.task!.name,
@@ -90,9 +95,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           color: colors.red,
           draggable: false,
         }
-        ];
-        console.log(fixedTask);
-        }
+      ];
+      console.log(fixedTask);
+    }
     this.task.user = this.user;
     this.refresh.next();
   }

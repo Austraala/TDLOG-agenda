@@ -9,4 +9,4 @@ import { CalendarHeaderComponent } from './calendar-header.component';
   declarations: [CalendarHeaderComponent],
   exports: [CalendarHeaderComponent],
 })
-export class DemoUtilsModule {}
+export class DemoUtilsModule { }

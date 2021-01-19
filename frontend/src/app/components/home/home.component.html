@@ -8,71 +8,55 @@
     <app-calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
     </app-calendar-header>
 
-<div [ngSwitch]="view" style="margin-top:20px">
-  <mwl-calendar-month-view
-    *ngSwitchCase="'month'"
-    [viewDate]="viewDate"
-    [events]="events"
-    [activeDayIsOpen]="activeDayIsOpen"
-    [refresh]="refresh"
-    (dayClicked)="dayClicked($event.day)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-month-view>
-  <mwl-calendar-week-view
-    *ngSwitchCase="'week'"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-week-view>
-  <mwl-calendar-day-view
-    *ngSwitchCase="'day'"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-day-view>
-</div>
+    <div [ngSwitch]="view" style="margin-top:20px">
+      <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
+        [activeDayIsOpen]="activeDayIsOpen" [refresh]="refresh" (dayClicked)="dayClicked($event.day)"
+        (eventTimesChanged)="eventTimesChanged($event)">
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+        (eventTimesChanged)="eventTimesChanged($event)">
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+        (eventTimesChanged)="eventTimesChanged($event)">
+      </mwl-calendar-day-view>
+    </div>
 
 
   </div>
   <div class="col-md-3 border">
     <div class="row">
-    <h3 style="margin-top:-10px">Create a task</h3>
-    <form (ngSubmit)="addTask()" novalidate>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="enter name" [(ngModel)]="task.name" name="name"
-          required>
-      </div>
-      <div class="form-group">
-        <label for="duration">Duration</label>
-        <input type="number" class="form-control" id="duration" placeholder="enter duration in minutes"
-          [(ngModel)]="task.duration" name="duration" required>
-      </div>
-      <div class="form-group">
-        <label for="difficulty">Difficulty</label>
-        <select class="form-control" id="difficulty" [(ngModel)]="task.difficulty" name="difficulty" required>
-          <option *ngFor="let difficulty of difficulties" [value]="difficulty">{{difficulty}}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="deadline">Deadline</label>
-        <input type="date" class="form-control" id="deadline" placeholder="enter deadline"
-          [(ngModel)]="mobileTask.deadline" name="deadline" required>
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-      </div>
+      <h3 style="margin-top:-10px">Create a task</h3>
+      <form (ngSubmit)="addTask()" novalidate>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="enter name" [(ngModel)]="task.name" name="name"
+            required>
+        </div>
+        <div class="form-group">
+          <label for="duration">Duration</label>
+          <input type="number" class="form-control" id="duration" placeholder="enter duration in minutes"
+            [(ngModel)]="task.duration" name="duration" required>
+        </div>
+        <div class="form-group">
+          <label for="difficulty">Difficulty</label>
+          <select class="form-control" id="difficulty" [(ngModel)]="task.difficulty" name="difficulty" required>
+            <option *ngFor="let difficulty of difficulties" [value]="difficulty">{{difficulty}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="deadline">Deadline</label>
+          <input type="date" class="form-control" id="deadline" placeholder="enter deadline"
+            [(ngModel)]="mobileTask.deadline" name="deadline" required>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
     <div class="row" style="margin-top:15px; padding-top:15px; border-top:solid">
       Your current tasks :
     </div>
     <div class="row" *ngFor="let mobileTask of mobileTasksList">
       {{mobileTask.task!.name}}
-       <button class="btn btn-default" (click)="deleteMobileTask(mobileTask)">Delete</button>
+      <button class="btn btn-default" (click)="deleteMobileTask(mobileTask)">Delete</button>
     </div>
     <div class="row" style="margin-top:15px; padding-top:15px">
       <button class="btn btn-default" (click)="placeTasks()">Place Mobile Tasks</button>

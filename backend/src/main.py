@@ -1,7 +1,7 @@
 """
 This is the main file for dev
 
-   Jean-Loup Raymond & Benjamin Roulin & Aaron Fargeon
+   Jean-Loup RAYMOND
    ENPC - (c)
 
 """
@@ -14,7 +14,7 @@ from entities.schemas import UserSchema, FixedTaskSchema, MobileTaskSchema
 from entities.task import Task, MobileTask, FixedTask
 from entities.user import User
 from flask_cors import CORS
-from sqlalchemy import create_engine, delete
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from backend.anki.anki import create_deck, delete_deck, clear_deck, \
     basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
@@ -146,7 +146,7 @@ def add_mobile_task():
 
     session = Session()
     user = \
-        session.query(User).filter(User.username == \
+        session.query(User).filter(User.username ==
                                    mobile_task_form['task']['user']['username']).first()
     task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
                 mobile_task_form['task']['difficulty'])
@@ -159,7 +159,9 @@ def add_mobile_task():
 
     # return true
     session.close()
-    return f.jsonify(mobile_task), 201
+    schema = MobileTaskSchema(many=True)
+    mobile_task_json = schema.dump(mobile_task)
+    return f.jsonify(mobile_task_json), 201
 
 
 @app.route('/remove_mobile_task', methods=['POST'])
@@ -170,7 +172,7 @@ def remove_mobile_task():
 
     session = Session()
     user = \
-        session.query(User).filter(User.username == \
+        session.query(User).filter(User.username ==
                                    mobile_task_form['task']['user']['username']).first()
     task = Task(user.id, mobile_task_form['task']['name'], mobile_task_form['task']['duration'],
                 mobile_task_form['task']['difficulty'])
@@ -234,7 +236,6 @@ def fix_mobile_tasks():
 def create_anki_deck():
     """ Creates an Anki deck """
     deck_name = f.request
-    print(deck_name, 'erjkfbndxfbwjlkdnb:wldjfb !mwjfnbjk<snmvgkjwnmgvnwmvgnw')
     create_deck(deck_name['name'])
     # We should store it in db
     return f.jsonify(deck_name), 201
@@ -261,7 +262,7 @@ def create_basic_card():
     """ Creates a "Basic"-modelled Anki card """
     basic_note_form = f.request.json
     basic_note(basic_note_form['deck_name'], basic_note_form['front'], basic_note_form['back'])
-    f.jsonify(True), 201
+    return f.jsonify(True), 201
 
 
 @app.route('/basic_reversed', methods=['POST'])
@@ -271,7 +272,7 @@ def create_basic_reversed_card():
     basic_reversed_note(basic_reversed_note_form['deck_name'],
                         basic_reversed_note_form['front'],
                         basic_reversed_note_form['back'])
-    f.jsonify(True), 201
+    return f.jsonify(True), 201
 
 
 @app.route('/basic_optional_reversed', methods=['POST'])
@@ -282,17 +283,17 @@ def create_basic_optional_reversed_card():
                                  basic_optional_reversed_note_form['front'],
                                  basic_optional_reversed_note_form['back'],
                                  basic_optional_reversed_note_form['add_reverse'])
-    f.jsonify(True), 201
+    return f.jsonify(True), 201
 
 
 @app.route('/basic_type_in', methods=['POST'])
 def create_basic_type_in_card():
     """ Creates a "Basic (type in the answer)"-modelled Anki card """
     basic_type_in_note_form = f.request.json
-    basic_type_in_note(basic_type_in_note_form['deck_name'],
-                       basic_type_in_note_form['front'],
-                       basic_type_in_note_form['back'])
-    f.jsonify(True), 201
+    basic_typein_note(basic_type_in_note_form['deck_name'],
+                      basic_type_in_note_form['front'],
+                      basic_type_in_note_form['back'])
+    return f.jsonify(True), 201
 
 
 @app.route('/cloze', methods=['POST'])
@@ -302,9 +303,9 @@ def create_cloze_card():
     cloze_note(cloze_note_form['deck_name'],
                cloze_note_form['sentence'],
                cloze_note_form['hidden_words'])
-    f.jsonify(True), 201
+    return f.jsonify(True), 201
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
     Session.remove()
