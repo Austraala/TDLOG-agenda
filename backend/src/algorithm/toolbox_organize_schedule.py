@@ -5,17 +5,21 @@ In this file are functions that are needed and useful for the optimize function.
     ENPC (c)
 
 """
-# pylint: disable=R0902
-# pylint: disable=R0913
+
+from datetime import datetime, timedelta
+
+# Should probably adapt Constraints to take in Datetime instead of year, month, day
 
 
 class Constraint:
     """ Defines the class constraint """
-    def __init__(self, name, week, day, starting_time, duration, deadline, mobile, implemented):
+    def __init__(self, name, year, month, day, starting_time, duration, deadline, mobile, implemented):
         self.name = name
         #   string
-        self.week = week
-        #   int between 1 and 52
+        self.year = year
+        #   int
+        self.month = month
+        #   int between 1 and 12
         self.day = day
         # int
         self.starting_time = starting_time
@@ -23,15 +27,14 @@ class Constraint:
         self.duration = duration
         #   int (in minutes)
         self.deadline = deadline
-        #   a [week, day, time] list, with time in minutes
-        #   This one is a bool (False if fixed, True if Mobile)
+        #   a Datetime
         self.mobile = mobile
 
         #   This one is a bool (False if still to be implemented, True otherwise)
         self.implemented = implemented
 
     def __lt__(self, other):
-        if self.week < other.week or self.day < other.day:
+        if self.month < other.month or self.day < other.day:
             return True
         return self.starting_time < other.starting_time
 
@@ -39,7 +42,7 @@ class Constraint:
         return not self.__lt__(other)
 
     def __str__(self):
-        return str(self.week) + str(self.day) + str(self.starting_time) + str(self.name)
+        return str(self.month) + str(self.day) + str(self.starting_time) + str(self.name)
 
 
 def time_to_hour_and_minute(time):
@@ -63,7 +66,7 @@ def check_simultaneity(constraint_one, constraint_two):
     It returns False otherwise.
     """
 
-    if constraint_one.week == constraint_two.week and constraint_one.day == constraint_two.day:
+    if constraint_one.month == constraint_two.month and constraint_one.day == constraint_two.day:
         sta_one = constraint_one.starting_time
         end_one = sta_one + constraint_one.duration
         sta_two = constraint_two.starting_time
@@ -97,7 +100,7 @@ def merge_time_constraints(list_constraints, constraint_one, constraint_two):
     starting_time = min(constraint_one.starting_time, constraint_two.starting_time)
     duration = max(ending_time1, ending_time2) - starting_time
 
-    new_constraint = Constraint(new_name, constraint_one.week, constraint_one.day,
+    new_constraint = Constraint(new_name, constraint_one.month, constraint_one.day,
                                 #   Starting time
                                 starting_time,
                                 #   Ending time
@@ -141,19 +144,23 @@ def compare_time_constraints(constraint_one, constraint_two):
     #   Check if both are fixed :
     if not constraint_one.mobile and not constraint_two.mobile:
 
-        if constraint_one.week < constraint_two.week or constraint_one.day < constraint_two.day:
+        if constraint_one.month < constraint_two.month or constraint_one.day < constraint_two.day:
             return -1
         return -2 * (constraint_one[2] < constraint_two[2]) + 1
 
     #   Check if both are mobile :
-    #   A deadline is [week, day, time]
-    if constraint_one.deadline[0] < constraint_two.deadline[0] \
-            or constraint_one.deadline[1] < constraint_two.deadline[1] \
-            or constraint_one.deadline[2] < constraint_two.deadline[2]:
+    #   A deadline is a Datetime
+    if constraint_one.deadline < constraint_two.deadline \
+            or constraint_one.deadline < constraint_two.deadline \
+            or constraint_one.deadline < constraint_two.deadline:
         return -1
-    return (constraint_one.deadline[0] > constraint_two.deadline[0]
-            or constraint_one.deadline[1] > constraint_two.deadline[1]
-            or constraint_one.deadline[2] > constraint_two.deadline[2]) * 1
+    elif constraint_one.deadline > constraint_two.deadline \
+            or constraint_one.deadline > constraint_two.deadline \
+            or constraint_one.deadline > constraint_two.deadline:
+        return 1
+
+    #   If you can't do it, don't switch them.
+    return 0
 
 
 def sort_time_constraints(list_constraints):

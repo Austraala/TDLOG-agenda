@@ -9,13 +9,14 @@ This file defines the process through which we assign a starting date to each ta
 
 # Imports
 # from ..entities.task import FixedTask, Task, MobileTask
-from .toolbox_organize_schedule import sort_time_constraints
-# Constraint, time_to_hour_and_minute, minute_and_hour_to_time, check_simultaneity, \
-# merge_time_constraints, smooth_time_constraints, compare_time_constraints
-
+from .toolbox_organize_schedule import sort_time_constraints, Constraint, time_to_hour_and_minute
 from .interface_organize_schedule import get_constraints, \
     get_schedule_from_constraints
 # get_constraints_from_schedule
+
+from ..entities.task import Task, FixedTask, MobileTask
+
+from datetime import datetime
 
 
 # from entities.schedule import Schedule, Week, Day
@@ -69,19 +70,20 @@ def check_timeslot(end_previous_task, start_next_task, duration):
     return False
 
 
-def find_time_today(mobile_task, list_constraints, day, week):
+def find_time_today(mobile_task, list_constraints, day, month, year):
     """
     This function looks for an appropriate timeslot in the corresponding day.
-    If it finds the time, it implements it and returns True (it found a solution)
+    If it finds the time, it returns True (it found a solution) and a corresponding fixed task
     If it doesn't, it returns False. You'll have to try next day.
     """
 
     constraints_of_that_day = []
     duration = mobile_task.duration
+    new_task = FixedTask()
 
     #   Look for all the constraints corresponding to the relevant day and week
     for constraint in list_constraints:
-        if not constraint.week and constraint.week == week and constraint.day == day:
+        if not constraint.month == month and constraint.day == day:
             constraints_of_that_day.append(constraint)
 
     #   Order them
@@ -90,12 +92,15 @@ def find_time_today(mobile_task, list_constraints, day, week):
     #   Check if there's time before the first task
     if constraints_of_that_day[0].starting_time > 0:
         if check_timeslot(0, constraints_of_that_day[0].starting_time, duration):
-            mobile_task.week = week
-            mobile_task.day = day
-            mobile_task.starting_date = 0
-            mobile_task.implemented = True
+            new_task.duration = duration
+            new_task.start.year = year
+            new_task.start.month = month
+            new_task.start.day = day
+            new_task.start.hour = time_to_hour_and_minute(0)[0]
+            new_task.start.minute = time_to_hour_and_minute(0)[1]
+            new_task.name = mobile_task.name
 
-            return True
+            return [True, new_task]
 
     #   Check if there's time anywhere
     else:
@@ -107,12 +112,15 @@ def find_time_today(mobile_task, list_constraints, day, week):
             if check_timeslot(end_previous_task, start_next_task, duration):
                 #   It means there's time !
 
-                mobile_task.week = week
-                mobile_task.day = day
-                mobile_task.starting_time = end_previous_task
-                mobile_task.implemented = True
+                new_task.duration = duration
+                new_task.start.year = year
+                new_task.start.month = month
+                new_task.start.day = day
+                new_task.start.hour = time_to_hour_and_minute(end_previous_task)[0]
+                new_task.start.minute = time_to_hour_and_minute(end_previous_task)[1]
+                new_task.name = mobile_task.name
 
-                return True
+                return [True, new_task]
 
     #   Check if there's time after the last task
     if constraints_of_that_day[0].starting_time < 1440:
@@ -120,14 +128,18 @@ def find_time_today(mobile_task, list_constraints, day, week):
                             constraints_of_that_day[-1].duration
 
         if check_timeslot(end_previous_task, 1440, duration):
-            mobile_task.week = week
-            mobile_task.day = day
-            mobile_task.starting_date = end_previous_task
-            mobile_task.implemented = True
+            mobile_task.month = month
+            new_task.duration = duration
+            new_task.start.year = year
+            new_task.start.month = month
+            new_task.start.day = day
+            new_task.start.hour = time_to_hour_and_minute(end_previous_task)[0]
+            new_task.start.minute = time_to_hour_and_minute(end_previous_task)[1]
+            new_task.name = mobile_task.name
 
-            return True
+            return [True, new_task]
 
-    return False
+    return [False, False]
 
 
 #   VI - Schedule from list of constraints and constraints from list os schedules
@@ -136,38 +148,32 @@ def find_time_today(mobile_task, list_constraints, day, week):
 #   VII - Big Function that optimizes
 
 
-def organize_schedule(list_tasks, current_week, current_day):
+def organize_schedule(list_tasks, current_year, current_month, current_day):
     """
     This function puts the mobile_tasks where it can, and gives each of them a starting date.
     It gets them one at a time.
-    It returns a list of constraints under the form of a list of fixed tasks.
+    It returns a list of constraints.
     """
 
     #   Starts the next day
-    day = current_day
-    week = current_week
-    if day == 6:
-        day = 0
-        week += 1
-    else:
-        day += 1
+
+    check_date = datetime(current_year, current_month, current_day)
+    check_date += 1
+    list_tasks=[]
 
     list_constraints = sort_time_constraints(get_constraints(list_tasks))
     for constraint in list_constraints:
-        check_day = day
-        check_week = week
         if constraint.mobile and not constraint.implemented:
             #   only if the constraint is mobile and not implemented
-            while not find_time_today(constraint, list_constraints, check_week, check_day):
-                #   It doesn't go into the while if it fins immediately.
+            while not find_time_today(constraint, list_constraints,
+                                      check_date.year, check_date.month, check_date.day)[0]:
+                #   It doesn't go into the while if it finds immediately.
                 #   The function find_time_today already updates it.
-                if check_day == 6:
-                    check_day = 0
-                    check_week += 1
-                else:
-                    check_day += 1
+                check_date += 1
+            list_tasks.append(find_time_today(constraint, list_constraints,
+                                              check_date.year, check_date.month, check_date.day)[1])
 
-    return list_constraints
+    return list_tasks
 
 
 #    PART B - OPTIMIZATION WITH SHUFFLE

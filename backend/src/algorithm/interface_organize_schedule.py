@@ -6,7 +6,7 @@
 """
 
 from .toolbox_organize_schedule import Constraint
-from ..entities.task import FixedTask
+from ..entities.task import Task, FixedTask
 
 
 def get_constraints(list_tasks_to_implement):
@@ -97,3 +97,16 @@ def get_constraints_from_schedule(schedule, reshuffle):
                 list_constraints.append(new_constraint)
 
     return list_constraints
+
+
+def get_tasks_from_constraints(list_constraints, user_id):
+    """
+    This function receives a list of constraints and returns a list of fixed tasks.
+    """
+    list_tasks = []
+    for constraint in list_constraints:
+        new_task = Task(
+            user_id, constraint.name, constraint.duration, 0
+        )
+        new_task.beginning_date = [constraint.month]
+
