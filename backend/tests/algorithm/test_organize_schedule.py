@@ -8,11 +8,11 @@ This is a pytest file. To run with pytest
 """
 # pylint: disable=E0401
 
-from ...src.algorithm.toolbox_organize_schedule import Constraint, sort_time_constraints
+from backend.src.algorithm.toolbox_organize_schedule import Constraint, sort_time_constraints
 
-from ...src.algorithm.entities.task import Task, FixedTask, MobileTask
+from backend.src.entities.task import Task, FixedTask, MobileTask
 
-from ...src.algorithm.interface_organize_schedule import get_constraints
+from backend.src.algorithm.interface_organize_schedule import get_constraints
 
 constraint_one_test = Constraint("Constraint_1", False, False, False, False, 30, [2021, 6, 8, 900], True, False)
 constraint_two_test = Constraint("Constraint_2", False, False, False, False, 60, [2021, 6, 8, 540], True, False)
@@ -38,9 +38,3 @@ def test_sort_time_constraints():
                                                        constraint_three_test,
                                                        constraint_four_test,
                                                        constraint_one_test]
-
-def get_constraints()
-    """
-    
-    :return: 
-    """

@@ -9,7 +9,7 @@ This is a pytest file. To run with pytest
 # pylint: disable=E0401
 
 
-from ...src.algorithm.crypto import encrypt, compare
+from backend.src.algorithm.crypto import encrypt, compare
 
 PASSWORD_TEST = "password_test"
 ENCRYPTED_TEST = b'$2b$16$r0ZiH4AInwwWyX2rEodRE.0dYzPKEda8N41ZsK4lIq/UavRFfQcV6'

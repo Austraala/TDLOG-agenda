@@ -9,7 +9,7 @@ This is a pytest file. To run with pytest
 
 import datetime
 
-from ...src.entities.task import Task, FixedTask, MobileTask
+from backend.src.entities.task import Task, FixedTask, MobileTask
 # from ..algorithm.optimize import
 
 # Defines tested variables

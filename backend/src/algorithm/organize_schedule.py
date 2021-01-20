@@ -9,12 +9,12 @@ This file defines the process through which we assign a starting date to each ta
 
 # Imports
 # from ..entities.task import FixedTask, Task, MobileTask
-from .toolbox_organize_schedule import sort_time_constraints, Constraint, time_to_hour_and_minute
+from .toolbox_organize_schedule import sort_time_constraints, time_to_hour_and_minute
 from .interface_organize_schedule import get_constraints, \
     get_schedule_from_constraints
 # get_constraints_from_schedule
 
-from ..entities.task import Task, FixedTask, MobileTask
+from entities.task import FixedTask
 
 from datetime import datetime
 

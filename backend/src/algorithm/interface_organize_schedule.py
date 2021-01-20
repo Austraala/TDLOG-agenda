@@ -6,7 +6,7 @@
 """
 
 from .toolbox_organize_schedule import Constraint
-from ..entities.task import Task, FixedTask
+from entities.task import Task, FixedTask
 
 
 def get_constraints(list_tasks_to_implement):
