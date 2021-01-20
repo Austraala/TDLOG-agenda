@@ -16,9 +16,9 @@ from entities.user import User
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from backend.anki.anki import create_deck, delete_deck, clear_deck, \
+from anki.anki import create_deck, delete_deck, clear_deck, \
     basic_note, basic_reversed_note, basic_optional_reversed_note, basic_typein_note, cloze_note
-from backend.src.algorithm.organize_schedule import organize_schedule
+from algorithm.organize_schedule import organize_schedule
 
 app = f.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite+pysqlite:////database.db'
@@ -234,7 +234,7 @@ def fix_mobile_tasks():
 @app.route('/create', methods=['POST'])
 def create_anki_deck():
     """ Creates an Anki deck """
-    deck_name = f.request
+    deck_name = f.request.json
     create_deck(deck_name['name'])
     # We should store it in db
     return f.jsonify(deck_name), 201
